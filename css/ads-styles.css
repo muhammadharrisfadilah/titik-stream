@@ -1,0 +1,275 @@
+/* ===== ADVERTISEMENT STYLES ===== */
+
+/* Ad Banner Container */
+.ad-banner-container {
+  background: #f8f8f8;
+  padding: 12px;
+  margin: 16px 0;
+  border-radius: 8px;
+  border: 1px solid #e0e0e0;
+  position: relative;
+  overflow: hidden;
+  animation: fadeInAd 0.5s ease;
+}
+
+@keyframes fadeInAd {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Ad Label */
+.ad-label {
+  font-size: 10px;
+  color: #999;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  margin-bottom: 8px;
+  text-align: center;
+  font-weight: 600;
+}
+
+/* A-Ads specific styling */
+#aads-banner-container {
+  min-height: 90px;
+}
+
+#aads-banner-container iframe {
+  display: block;
+  margin: 0 auto;
+  max-width: 100%;
+}
+
+/* Adsterra specific styling */
+#adsterra-banner-container {
+  min-height: 70px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+#adsterra-banner {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+/* Ad in match detail page - above video */
+.video-player-container + .ad-banner-container,
+.ad-banner-container + .video-player-container {
+  margin: 0 0 16px 0;
+  border-radius: 0;
+}
+
+/* Ad below video player */
+.video-player-container ~ .ad-banner-container {
+  margin: 16px 0;
+  border-radius: 8px;
+}
+
+/* Ad before tabs */
+#tabs ~ .ad-banner-container {
+  margin: 0;
+  border-radius: 0;
+  border-left: none;
+  border-right: none;
+}
+
+/* League section ads */
+.league-section + .ad-banner-container {
+  margin: 20px 16px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 480px) {
+  .ad-banner-container {
+    margin: 12px 8px;
+    padding: 10px;
+    border-radius: 6px;
+  }
+
+  .ad-label {
+    font-size: 9px;
+  }
+
+  #aads-banner-container iframe {
+    height: 70px !important;
+  }
+}
+
+/* Smartlink notification toast */
+.smartlink-toast {
+  position: fixed;
+  bottom: 90px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 14px 24px;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: 600;
+  z-index: 10001;
+  box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+  animation: bounceIn 0.5s ease;
+  backdrop-filter: blur(10px);
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-50%) scale(0.3);
+  }
+  50% {
+    opacity: 1;
+    transform: translateX(-50%) scale(1.05);
+  }
+  70% {
+    transform: translateX(-50%) scale(0.9);
+  }
+  100% {
+    transform: translateX(-50%) scale(1);
+  }
+}
+
+/* Loading indicator for ads */
+.ad-loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 90px;
+  color: #999;
+  font-size: 12px;
+}
+
+.ad-loading::before {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid #e0e0e0;
+  border-top-color: #999;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: 8px;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Ad container in mobile view */
+@media (max-width: 380px) {
+  .ad-banner-container {
+    margin: 12px 4px;
+    padding: 8px;
+  }
+
+  #adsterra-banner iframe {
+    max-width: 100%;
+    height: auto !important;
+  }
+}
+
+/* Hide ads during loading state */
+.loading-container ~ .ad-banner-container,
+.empty-state ~ .ad-banner-container {
+  display: none;
+}
+
+/* Smooth ad appearance */
+.ad-banner-container.visible {
+  animation: fadeInAd 0.6s ease;
+}
+
+/* Ad spacing improvements */
+.mobile-container .ad-banner-container:first-child {
+  margin-top: 0;
+}
+
+.mobile-container .ad-banner-container:last-child {
+  margin-bottom: 80px; /* Account for bottom nav */
+}
+
+/* Match detail specific ad positioning */
+.match-header + .ad-banner-container {
+  margin-top: 0;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+}
+
+/* Ad between content sections */
+.card + .ad-banner-container {
+  margin: 24px 16px;
+}
+
+/* Premium ad styling (optional) */
+.ad-banner-container.premium {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border: 2px solid #f39c12;
+  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.2);
+}
+
+.ad-banner-container.premium .ad-label {
+  color: #d35400;
+  font-weight: 700;
+}
+
+/* Ad close button (optional) */
+.ad-close-btn {
+  position: absolute;
+  top: 4px;
+  right: 4px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  font-size: 12px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0.6;
+  transition: opacity 0.2s;
+  z-index: 10;
+}
+
+.ad-close-btn:hover {
+  opacity: 1;
+}
+
+/* Prevent layout shift */
+.ad-banner-container[data-loaded="false"] {
+  min-height: 90px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ad-banner-container[data-loaded="false"]::after {
+  content: 'Loading advertisement...';
+  font-size: 11px;
+  color: #ccc;
+}
+
+/* Dark mode support (optional) */
+@media (prefers-color-scheme: dark) {
+  .ad-banner-container {
+    background: #2c2c2c;
+    border-color: #444;
+  }
+
+  .ad-label {
+    color: #888;
+  }
+}

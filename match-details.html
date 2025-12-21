@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TITIK SPORTS - Match Details</title>
+    <link rel="stylesheet" href="css/match-details.css" />
+    <link rel="stylesheet" href="css/ads-styles.css" />
+    <script src="https://quge5.com/88/tag.min.js" data-zone="194806" async data-cfasync="false"></script>
+    <script>(function(s){s.dataset.zone='10319821',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"
+    />
+    
+    <!-- External Libraries -->
+     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.10/dist/hls.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
+  </head>
+  <body>
+    <div class="mobile-container">
+      <!-- Header -->
+      <header class="header">
+        <button class="back-btn" aria-label="Go back">←</button>
+        <h1 class="header-title">Match Details</h1>
+      </header>
+
+      <!-- Video Player Section -->
+      <div class="video-player-container">
+        <div class="video-wrapper">
+          <video id="videoElement" controls playsinline></video>
+        </div>
+        <div class="video-controls-info">
+          <span class="live-indicator">🔴 LIVE</span>
+          <span class="video-quality">HD</span>
+        </div>
+      </div>
+
+      <!-- Match Header -->
+      <div id="matchHeader">
+        <!-- Will be populated by JavaScript -->
+      </div>
+
+      <!-- Tabs -->
+      <nav class="tabs" id="tabs" role="tablist">
+        <button
+          class="tab active"
+          data-tab="overview"
+          role="tab"
+          aria-selected="true"
+        >
+          Overview
+        </button>
+        <button class="tab" data-tab="stats" role="tab" aria-selected="false">
+          Statistics
+        </button>
+        <button class="tab" data-tab="lineups" role="tab" aria-selected="false">
+          Lineups
+        </button>
+        <button class="tab" data-tab="facts" role="tab" aria-selected="false">
+          Match Facts
+        </button>
+      </nav>
+
+      <!-- Content -->
+      <main class="container" id="content" role="main">
+        <div class="loading" id="loading">
+          <div class="spinner"></div>
+          <div class="loading-text">Loading match details...</div>
+        </div>
+        <!-- Tab content will be populated here -->
+      </main>
+
+      <!-- Toast Container -->
+      <div id="toastContainer"></div>
+    </div>
+
+    <!-- ===== MODULAR JAVASCRIPT FILES ===== -->
+    
+    <!-- 1. Configuration -->
+    <script src="js/match-details/config/app-config.js"></script>
+    
+    <!-- 2. Utilities -->
+    <script src="js/match-details/utils/helpers.js"></script>
+    
+    <!-- 3. Services -->
+    <script src="js/match-details/services/supabase-service.js"></script>
+    <script src="js/match-details/services/video-service.js"></script>
+    <script src="js/match-details/services/api-service.js"></script>
+    
+    <!-- 4. Components -->
+    <script src="js/match-details/components/video-player.js"></script>
+    <script src="js/match-details/components/video-controls.js"></script>
+    <script src="js/match-details/components/renderer.js"></script>
+    
+    <!-- 5. Main Application (must be last) -->
+    <script src="js/match-details/app.js"></script>
+    
+    <!-- 6. Ads Manager (optional) -->
+  </body>
+</html>

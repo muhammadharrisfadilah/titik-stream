@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TITIK SPORTS - Football Scores & Standings</title>
+    <meta
+      name="description"
+      content="Live football scores, match schedules, and league standings"
+    />
+    <meta name="ppck-ver" content="559af1cc71febca1a5cae2503efa5959" />
+    <script src="https://quge5.com/88/tag.min.js" data-zone="194806" async data-cfasync="false"></script>
+    <script>(function(s){s.dataset.zone='10319821',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" href="css/ads-styles.css" />
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"
+    />
+  </head>
+  <body>
+    <div class="mobile-container">
+      <!-- Header -->
+      <div class="header">
+        <h1>
+          <img
+            src="logo.png"
+            alt="TITIK SPORTS"
+            style="width: 98px; height: 58px"
+          />
+        </h1>
+      </div>
+
+      <!-- Refresh Control -->
+      <div class="refresh-control" id="refreshControl">
+        <div class="refresh-spinner"></div>
+      </div>
+
+      <!-- Date Navigation (Only for Matches) -->
+      <div class="date-nav" id="dateNav">
+        <button id="prevDay" aria-label="Previous day">◄</button>
+        <div class="today" id="todayButton">
+          <span id="currentDateText">Today</span>
+          <span class="chevron">▼</span>
+        </div>
+        <button id="nextDay" aria-label="Next day">►</button>
+
+        <!-- Calendar Popup -->
+        <div class="calendar-popup" id="calendarPopup">
+          <div class="calendar-header">
+            <button id="prevMonth" aria-label="Previous month">◄</button>
+            <span id="calendarMonth">December 2025</span>
+            <button id="nextMonth" aria-label="Next month">►</button>
+          </div>
+          <div class="calendar-grid" id="calendarGrid"></div>
+        </div>
+      </div>
+
+      <!-- Filter Tabs (Only for Matches) -->
+      <div class="filter-tabs" id="filterTabs">
+        <button data-filter="all" class="active">All Matches</button>
+        <button data-filter="live">Live Now</button>
+        <button data-filter="finished">Finished</button>
+        <button data-filter="scheduled">Upcoming</button>
+      </div>
+
+      <!-- Main Content -->
+      <main id="content">
+        <div class="loading-container">
+          <div class="loading-spinner"></div>
+          <div class="loading-text">Loading matches...</div>
+        </div>
+      </main>
+
+      <!-- Bottom Navigation -->
+      <nav class="bottom-nav" role="navigation">
+        <div
+          class="nav-item active"
+          data-view="matches"
+          role="button"
+          tabindex="0"
+        >
+          <span class="nav-icon">⚽</span>
+          Matches
+        </div>
+        <div class="nav-item" data-view="leagues" role="button" tabindex="0">
+          <span class="nav-icon">🏆</span>
+          Leagues
+        </div>
+        <div class="nav-item" data-view="standings" role="button" tabindex="0">
+          <span class="nav-icon">📊</span>
+          Standings
+        </div>
+      </nav>
+
+      <!-- Toast Notification -->
+      <div class="toast" id="toast"></div>
+    </div>
+
+    <!-- ===== MODULAR JAVASCRIPT FILES ===== -->
+    
+    <!-- 1. Configuration (MUST BE FIRST) -->
+    <script src="js/index/config/app-config.js"></script>
+    
+    <!-- 2. Utilities -->
+    <script src="js/index/utils/helpers.js"></script>
+    
+    <!-- 3. Services -->
+    <script src="js/index/services/cache-service.js"></script>
+    <script src="js/index/services/api-service.js"></script>
+    
+    <!-- 4. Components (Renderers) -->
+    <script src="js/index/components/matches-renderer.js"></script>
+    <script src="js/index/components/leagues-renderer.js"></script>
+    <script src="js/index/components/standings-renderer.js"></script>
+    
+    <!-- 5. Managers -->
+    <script src="js/index/managers/date-manager.js"></script>
+    <script src="js/index/managers/view-manager.js"></script>
+    <script src="js/index/managers/ads-manager.js"></script>
+    
+    <!-- 6. Main Application (MUST BE LAST) -->
+    <script src="js/index/app.js"></script>
+  </body>
+</html>
