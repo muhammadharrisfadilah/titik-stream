@@ -1,0 +1,59 @@
+# robots.txt for TITIK SPORTS
+
+# Allow all search engines
+User-agent: *
+Allow: /
+
+# Special rules for specific bots
+User-agent: Googlebot
+Allow: /
+Crawl-delay: 0
+
+User-agent: Googlebot-Image
+Allow: /assets/
+Allow: /logo.png
+
+User-agent: Yandex
+Allow: /
+Crawl-delay: 1
+
+User-agent: Bingbot
+Allow: /
+Crawl-delay: 1
+
+# Block bad bots
+User-agent: AhrefsBot
+Disallow: /
+
+User-agent: SemrushBot
+Disallow: /
+
+User-agent: MJ12bot
+Disallow: /
+
+User-agent: DotBot
+Disallow: /
+
+# Disallow unnecessary paths
+Disallow: /api/
+Disallow: /admin/
+Disallow: /private/
+Disallow: /*.json$
+Disallow: /*?*utm_source=
+Disallow: /*?*utm_medium=
+Disallow: /*?*utm_campaign=
+
+# Allow important assets
+Allow: /css/
+Allow: /js/
+Allow: /assets/
+Allow: /logo.png
+Allow: /manifest.json
+
+# Sitemap location
+Sitemap: https://titiksports.pages.dev/sitemap.xml
+Sitemap: https://titiksports.pages.dev/sitemap-matches.xml
+Sitemap: https://titiksports.pages.dev/sitemap-leagues.xml
+
+# Host (for Yandex)
+Host: https://titiksports.pages.dev

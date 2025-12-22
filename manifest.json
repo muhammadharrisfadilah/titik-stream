@@ -1,0 +1,163 @@
+{
+  "name": "TITIK SPORTS - Live Football Scores & Streaming",
+  "short_name": "TITIK SPORTS",
+  "description": "Nonton live streaming sepak bola gratis! Skor langsung, jadwal pertandingan, dan klasemen liga terlengkap.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#ff6600",
+  "background_color": "#ffffff",
+  "lang": "id",
+  "dir": "ltr",
+  
+  "icons": [
+    {
+      "src": "/assets/icon-72x72.png",
+      "sizes": "72x72",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-96x96.png",
+      "sizes": "96x96",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-128x128.png",
+      "sizes": "128x128",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-144x144.png",
+      "sizes": "144x144",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-152x152.png",
+      "sizes": "152x152",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "/assets/icon-384x384.png",
+      "sizes": "384x384",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/assets/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  
+  "screenshots": [
+    {
+      "src": "/assets/screenshot-mobile-1.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Live Match Scores"
+    },
+    {
+      "src": "/assets/screenshot-mobile-2.png",
+      "sizes": "540x720",
+      "type": "image/png",
+      "platform": "narrow",
+      "label": "Match Details"
+    },
+    {
+      "src": "/assets/screenshot-desktop-1.png",
+      "sizes": "1280x720",
+      "type": "image/png",
+      "platform": "wide",
+      "label": "Desktop View"
+    }
+  ],
+  
+  "categories": [
+    "sports",
+    "entertainment",
+    "news"
+  ],
+  
+  "shortcuts": [
+    {
+      "name": "Live Matches",
+      "short_name": "Live",
+      "description": "View live matches",
+      "url": "/?view=live",
+      "icons": [
+        {
+          "src": "/assets/shortcut-live.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Today's Matches",
+      "short_name": "Today",
+      "description": "View today's matches",
+      "url": "/?date=today",
+      "icons": [
+        {
+          "src": "/assets/shortcut-today.png",
+          "sizes": "96x96"
+        }
+      ]
+    },
+    {
+      "name": "Standings",
+      "short_name": "Table",
+      "description": "View league standings",
+      "url": "/?view=standings",
+      "icons": [
+        {
+          "src": "/assets/shortcut-standings.png",
+          "sizes": "96x96"
+        }
+      ]
+    }
+  ],
+  
+  "share_target": {
+    "action": "/share",
+    "method": "POST",
+    "enctype": "multipart/form-data",
+    "params": {
+      "title": "title",
+      "text": "text",
+      "url": "url"
+    }
+  },
+  
+  "prefer_related_applications": false,
+  
+  "related_applications": [
+    {
+      "platform": "play",
+      "url": "https://play.google.com/store/apps/details?id=com.titiksports.app",
+      "id": "com.titiksports.app"
+    }
+  ],
+  
+  "iarc_rating_id": "e84b072d-71b3-4d3e-86ae-31a8ce4e53b7",
+  
+  "protocol_handlers": [
+    {
+      "protocol": "web+sports",
+      "url": "/match?id=%s"
+    }
+  ]
+}
