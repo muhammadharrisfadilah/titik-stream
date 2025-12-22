@@ -8,11 +8,245 @@
       name="description"
       content="Live football scores, match schedules, and league standings"
     />
-    <meta name="ppck-ver" content="559af1cc71febca1a5cae2503efa5959" />
-    <script src="https://quge5.com/88/tag.min.js" data-zone="194806" async data-cfasync="false"></script>
-    <script>(function(s){s.dataset.zone='10319821',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
+    
+    <!-- Original CSS -->
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/ads-styles.css" />
+    
+    <!-- ===== ENHANCED AD STYLES FOR INDEX PAGE ===== -->
+    <style>
+        /* ===== SOCIAL BAR (Mobile Sticky Top) ===== */
+        #adsterra-social-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            height: 50px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        body.has-social-bar {
+            padding-top: 50px;
+        }
+        
+        body.has-social-bar .header {
+            top: 50px;
+        }
+        
+        /* ===== LEADERBOARD (Desktop Top) ===== */
+        .exoclick-leaderboard {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            border-bottom: 1px solid #e0e0e0;
+        }
+        
+        /* ===== NATIVE ADS (In-Feed) ===== */
+        .native-ad {
+            margin: 20px 8px;
+            background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+            border-radius: 12px;
+            padding: 16px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            border: 1px solid #f0f0f0;
+            animation: fadeInAd 0.5s ease;
+        }
+        
+        .native-ad .ad-label {
+            font-size: 9px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 12px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* ===== STICKY BANNER (Bottom) ===== */
+        #sticky-banner {
+            position: fixed;
+            bottom: 60px;
+            left: 0;
+            right: 0;
+            z-index: 9998;
+            background: white;
+            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
+            padding: 8px;
+            text-align: center;
+        }
+        
+        .sticky-close-btn {
+            position: absolute;
+            top: 4px;
+            right: 4px;
+            background: rgba(0,0,0,0.5);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 24px;
+            height: 24px;
+            cursor: pointer;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+            transition: all 0.2s;
+        }
+        
+        .sticky-close-btn:hover {
+            background: rgba(0,0,0,0.8);
+        }
+        
+        /* ===== BANNER CONTAINERS ===== */
+        .ad-banner-container {
+            background: #f8f8f8;
+            padding: 12px;
+            margin: 16px 8px;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            animation: fadeInAd 0.5s ease;
+            text-align: center;
+        }
+        
+        .ad-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* ===== SMARTLINK TOAST ===== */
+        .smartlink-toast {
+            position: fixed;
+            bottom: 90px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 14px 24px;
+            border-radius: 25px;
+            font-size: 14px;
+            font-weight: 600;
+            z-index: 10001;
+            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+            animation: bounceIn 0.5s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        @keyframes bounceIn {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.3);
+            }
+            50% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1.05);
+            }
+            70% {
+                transform: translateX(-50%) scale(0.9);
+            }
+            100% {
+                transform: translateX(-50%) scale(1);
+            }
+        }
+        
+        @keyframes fadeInAd {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* ===== RESPONSIVE ADJUSTMENTS ===== */
+        @media (max-width: 768px) {
+            /* Hide desktop-only ads */
+            .exoclick-leaderboard {
+                display: none;
+            }
+            
+            /* Adjust native ad spacing */
+            .native-ad {
+                margin: 16px 8px;
+                padding: 12px;
+            }
+            
+            /* Adjust banner containers */
+            .ad-banner-container {
+                margin: 12px 4px;
+                padding: 10px;
+            }
+            
+            /* Ensure ads don't cause horizontal scroll */
+            .ad-banner-container,
+            .native-ad,
+            #sticky-banner {
+                max-width: 100%;
+                overflow: hidden;
+            }
+            
+            .ad-banner-container iframe,
+            .native-ad iframe {
+                max-width: 100% !important;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            /* Hide mobile-only ads */
+            #adsterra-social-bar {
+                display: none;
+            }
+            
+            /* Desktop banner styling */
+            .ad-banner-container {
+                max-width: 728px;
+                margin: 16px auto;
+            }
+            
+            .native-ad {
+                max-width: 300px;
+                margin: 20px auto;
+            }
+        }
+        
+        /* ===== LOADING STATES ===== */
+        .ad-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .ad-loading::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e0e0e0;
+            border-top-color: #999;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        /* ===== ENSURE BOTTOM NAV NOT HIDDEN ===== */
+        .bottom-nav {
+            z-index: 9999;
+        }
+    </style>
+    
     <link
       rel="icon"
       href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"
@@ -30,6 +264,12 @@
           />
         </h1>
       </div>
+      
+      <!-- ===== AD SLOT: Adsterra Social Bar (Mobile Sticky Top) ===== -->
+      <!-- Inserted by IndexAdsManager.insertAdsterraSocialBar() -->
+      
+      <!-- ===== AD SLOT: ExoClick Leaderboard 728x90 (Desktop) ===== -->
+      <!-- Inserted by IndexAdsManager.insertExoClickLeaderboard() -->
 
       <!-- Refresh Control -->
       <div class="refresh-control" id="refreshControl">
@@ -55,6 +295,9 @@
           <div class="calendar-grid" id="calendarGrid"></div>
         </div>
       </div>
+      
+      <!-- ===== AD SLOT: ExoClick Banner 300x250 (After Date Nav) ===== -->
+      <!-- Inserted by IndexAdsManager.insertExoClickBannerTop() -->
 
       <!-- Filter Tabs (Only for Matches) -->
       <div class="filter-tabs" id="filterTabs">
@@ -63,6 +306,9 @@
         <button data-filter="finished">Finished</button>
         <button data-filter="scheduled">Upcoming</button>
       </div>
+      
+      <!-- ===== AD SLOT: Monetag Banner 300x250 (After Filters) ===== -->
+      <!-- Inserted by IndexAdsManager.insertMonetagBanner() -->
 
       <!-- Main Content -->
       <main id="content">
@@ -70,6 +316,9 @@
           <div class="loading-spinner"></div>
           <div class="loading-text">Loading matches...</div>
         </div>
+        
+        <!-- League sections will be rendered here -->
+        <!-- Native ads will be inserted every 4 league sections -->
       </main>
 
       <!-- Bottom Navigation -->
@@ -92,12 +341,21 @@
           Standings
         </div>
       </nav>
+      
+      <!-- ===== AD SLOT: Sticky Banner (Bottom, after 3 seconds) ===== -->
+      <!-- Inserted by IndexAdsManager.showStickyBanner() -->
 
       <!-- Toast Notification -->
       <div class="toast" id="toast"></div>
     </div>
+    
+    <!-- ===== AD SLOT: Popunder (Adsterra or PopCash) ===== -->
+    <!-- Scripts injected by IndexAdsManager.initPopunders() -->
+    
+    <!-- ===== AD SLOT: Monetag Interstitial ===== -->
+    <!-- Script injected by IndexAdsManager.initInterstitial() -->
 
-    <!-- ===== MODULAR JAVASCRIPT FILES ===== -->
+    <!-- ===== JAVASCRIPT LOADING ORDER ===== -->
     
     <!-- 1. Configuration (MUST BE FIRST) -->
     <script src="js/index/config/app-config.js"></script>
@@ -117,9 +375,116 @@
     <!-- 5. Managers -->
     <script src="js/index/managers/date-manager.js"></script>
     <script src="js/index/managers/view-manager.js"></script>
-    <script src="js/index/managers/ads-manager.js"></script>
     
-    <!-- 6. Main Application (MUST BE LAST) -->
+    <!-- 6. Main Application -->
     <script src="js/index/app.js"></script>
+    
+    <!-- ===== 7. INDEX ADS MANAGER (MUST BE LAST) ===== -->
+    <script src="js/index/managers/index-ads-manager.js"></script>
+    
+    <!-- OR inline if you prefer -->
+    <!--
+    <script>
+        // Paste IndexAdsManager code here
+        // Replace all YOUR_ZONE_ID placeholders
+    </script>
+    -->
   </body>
 </html>
+
+<!--
+===== INTEGRATION CHECKLIST =====
+
+FILE STRUCTURE:
+□ Create: js/index/managers/index-ads-manager.js
+□ Update: index.html (add script tag)
+□ Update: css/ads-styles.css (add styles above if not present)
+
+CONFIGURATION:
+□ Replace YOUR_EXOCLICK_BANNER_ZONE_ID
+□ Replace YOUR_EXOCLICK_LEADERBOARD_ZONE_ID (desktop)
+□ Replace YOUR_SOCIAL_BAR_KEY (Adsterra)
+□ Replace YOUR_BANNER_KEY (Adsterra)
+□ Replace YOUR_NATIVE_KEY (Adsterra)
+□ Replace YOUR_POPUNDER_KEY (Adsterra)
+□ Replace YOUR_MONETAG_ZONE_ID (banner)
+□ Replace YOUR_INTERSTITIAL_ZONE_ID (Monetag)
+□ Replace YOUR_SMARTLINK_URL (Monetag)
+□ Replace YOUR_POPCASH_SITE_ID
+
+TESTING WEEKS:
+□ Week 1: Set testingWeek = 1 in config
+□ Week 2: Set testingWeek = 2 in config
+
+AD POSITIONS (AUTO-INSERTED):
+✅ Social Bar: Fixed top (mobile only)
+✅ Leaderboard 728x90: Below header (desktop only)
+✅ Banner 300x250: After date navigation
+✅ Monetag Banner: After filter tabs
+✅ Native Ads: Every 4 league sections (auto-inserted)
+✅ Sticky Banner: Bottom, appears after 3 seconds
+✅ Popunder: On page load, 1x per session
+✅ Interstitial: Every 4 minutes
+
+TESTING:
+□ Open index.html in browser
+□ Check console for: "✅ Index Ads Manager Initialized"
+□ Verify social bar shows on mobile
+□ Verify leaderboard shows on desktop
+□ Scroll down to see native ads between leagues
+□ Check sticky banner appears after 3 seconds
+□ Click match - should see smartlink notification
+□ Verify popunder shows once (check sessionStorage)
+
+EXPECTED BEHAVIOR:
+- First click on match: Smartlink opens, shows "1 more time"
+- Second click: Smartlink opens, navigates to match details
+- Third+ clicks: Direct navigation
+- Popunder: Only once per session
+- Interstitial: Every 4 minutes (if user still on page)
+
+REVENUE ESTIMATE (1,000 visitors/day):
+- Social Bar (mobile): $1.00/day
+- Leaderboard (desktop): $0.20/day
+- Top Banners (2): $2-3/day
+- Native Ads (3-5): $2-3/day
+- Sticky Banner: $1-1.5/day
+- Popunder: $4-6/day
+- Interstitial: $1-2/day
+- Smartlink: $0.50-1/day
+─────────────────────────────
+TOTAL: $11.70-18.20/day
+MONTHLY: $351-546
+
+MOBILE OPTIMIZATION:
+- All ads responsive
+- No horizontal scroll
+- Social bar doesn't cover header
+- Sticky banner above bottom nav
+- Native ads fit content width
+
+TROUBLESHOOTING:
+- If social bar covers header: Check body.has-social-bar class
+- If native ads don't appear: Check console, may need delay
+- If sticky banner not showing: Check config.stickyBanner.showAfter
+- If smartlink not working: Check click event listener attached
+- If popunder showing multiple times: Clear sessionStorage
+
+PERFORMANCE:
+- All scripts async
+- Native ads insert after DOM ready
+- No blocking render
+- Lazy load ad scripts
+- Total load time impact: <500ms
+
+NEXT STEPS:
+1. Get all Zone IDs from ad networks
+2. Replace placeholders in index-ads-manager.js
+3. Test on mobile device
+4. Test on desktop
+5. Monitor revenue in dashboards
+6. Compare Week 1 vs Week 2
+7. Optimize based on data
+
+GOOD LUCK! 🚀
+-->

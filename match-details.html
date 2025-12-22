@@ -1,83 +1,224 @@
 <!DOCTYPE html>
 <html lang="id">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>TITIK SPORTS - Match Details</title>
-    <link rel="stylesheet" href="css/match-details.css" />
-    <link rel="stylesheet" href="css/ads-styles.css" />
-    <script src="https://quge5.com/88/tag.min.js" data-zone="194806" async data-cfasync="false"></script>
-    <script>(function(s){s.dataset.zone='10319821',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))</script>
-    <link
-      rel="icon"
-      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"
-    />
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TITIK SPORTS - Match Details (with Ads)</title>
     
-    <!-- External Libraries -->
-     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-
+    <!-- Original CSS -->
+    <link rel="stylesheet" href="css/match-details.css">
+    <link rel="stylesheet" href="css/ads-styles.css">
+    
+    <!-- ===== AD NETWORKS CSS ===== -->
+    <style>
+        /* ===== EXOCLICK ADS ===== */
+        .exoclick-banner {
+            margin: 16px auto;
+            max-width: 300px;
+            background: #f8f8f8;
+            border-radius: 8px;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        /* ===== ADSTERRA SOCIAL BAR ===== */
+        #adsterra-social-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+            height: 50px;
+            background: white;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+        
+        /* Add padding to body when social bar is active */
+        body.has-social-bar {
+            padding-top: 50px;
+        }
+        
+        /* ===== MONETAG BANNER ===== */
+        .monetag-banner {
+            margin: 24px auto;
+            padding: 16px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #ffffff 100%);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        /* ===== MOBILE RESPONSIVE ===== */
+        @media (max-width: 768px) {
+            .exoclick-banner,
+            .monetag-banner {
+                margin: 12px 8px;
+            }
+            
+            /* Hide desktop-only banners */
+            .adsterra-banner {
+                display: none;
+            }
+        }
+        
+        @media (min-width: 769px) {
+            /* Hide mobile-only elements */
+            #adsterra-social-bar {
+                display: none;
+            }
+            
+            /* Desktop banner positioning */
+            .adsterra-banner {
+                float: right;
+                margin: 16px;
+                max-width: 300px;
+            }
+        }
+        
+        /* ===== AD LABEL STYLING ===== */
+        .ad-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+            text-align: center;
+            font-weight: 600;
+        }
+        
+        /* ===== PRE-ROLL OVERLAY ===== */
+        #ima-ad-container {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 1000;
+        }
+        
+        /* Skip button styling (already in JS but can be enhanced) */
+        .skip-ad-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            padding: 8px 16px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            border: 2px solid white;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            z-index: 1001;
+            transition: all 0.3s ease;
+        }
+        
+        .skip-ad-button:hover {
+            background: rgba(255,255,255,0.9);
+            color: #000;
+        }
+        
+        /* ===== LOADING STATES ===== */
+        .ad-loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 250px;
+            color: #999;
+            font-size: 12px;
+        }
+        
+        .ad-loading::before {
+            content: '';
+            width: 20px;
+            height: 20px;
+            border: 2px solid #e0e0e0;
+            border-top-color: #999;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+    
+    <!-- ===== EXTERNAL LIBRARIES ===== -->
+    <!-- Supabase -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    
+    <!-- Video Players -->
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.10/dist/hls.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
-  </head>
-  <body>
+    
+    <!-- ===== GOOGLE IMA SDK (For Pre-Roll) ===== -->
+    <!-- This is loaded by TitikAdsManager.loadGoogleIMA() but can be preloaded -->
+    <link rel="preload" href="https://imasdk.googleapis.com/js/sdkloader/ima3.js" as="script">
+</head>
+<body>
     <div class="mobile-container">
-      <!-- Header -->
-      <header class="header">
-        <button class="back-btn" aria-label="Go back">←</button>
-        <h1 class="header-title">Match Details</h1>
-      </header>
+        <!-- Header -->
+        <header class="header">
+            <button class="back-btn" aria-label="Go back">←</button>
+            <h1 class="header-title">Match Details</h1>
+        </header>
 
-      <!-- Video Player Section -->
-      <div class="video-player-container">
-        <div class="video-wrapper">
-          <video id="videoElement" controls playsinline></video>
+        <!-- Video Player Section (Pre-Roll will be injected here) -->
+        <div class="video-player-container">
+            <div class="video-wrapper">
+                <video id="videoElement" controls playsinline></video>
+                <!-- IMA Ad Container will be injected here by TitikAdsManager -->
+            </div>
+            <div class="video-controls-info">
+                <span class="live-indicator">🔴 LIVE</span>
+                <span class="video-quality">HD</span>
+            </div>
         </div>
-        <div class="video-controls-info">
-          <span class="live-indicator">🔴 LIVE</span>
-          <span class="video-quality">HD</span>
+        
+        <!-- ===== AD SLOT: ExoClick Banner 300x250 (Below Video) ===== -->
+        <!-- This will be inserted by TitikAdsManager.insertExoClickBanner() -->
+
+        <!-- Match Header -->
+        <div id="matchHeader">
+            <!-- Will be populated by JavaScript -->
         </div>
-      </div>
+        
+        <!-- ===== AD SLOT: Adsterra Banner 300x250 (Desktop) ===== -->
+        <!-- This will be inserted by TitikAdsManager.insertAdsterraBanner() -->
 
-      <!-- Match Header -->
-      <div id="matchHeader">
-        <!-- Will be populated by JavaScript -->
-      </div>
+        <!-- Tabs -->
+        <nav class="tabs" id="tabs" role="tablist">
+            <button class="tab active" data-tab="overview">Overview</button>
+            <button class="tab" data-tab="stats">Statistics</button>
+            <button class="tab" data-tab="lineups">Lineups</button>
+            <button class="tab" data-tab="facts">Match Facts</button>
+        </nav>
+        
+        <!-- ===== AD SLOT: Monetag Banner 300x250 (Below Tabs) ===== -->
+        <!-- This will be inserted by TitikAdsManager.insertMonetagBanner() -->
 
-      <!-- Tabs -->
-      <nav class="tabs" id="tabs" role="tablist">
-        <button
-          class="tab active"
-          data-tab="overview"
-          role="tab"
-          aria-selected="true"
-        >
-          Overview
-        </button>
-        <button class="tab" data-tab="stats" role="tab" aria-selected="false">
-          Statistics
-        </button>
-        <button class="tab" data-tab="lineups" role="tab" aria-selected="false">
-          Lineups
-        </button>
-        <button class="tab" data-tab="facts" role="tab" aria-selected="false">
-          Match Facts
-        </button>
-      </nav>
+        <!-- Content -->
+        <main class="container" id="content" role="main">
+            <div class="loading" id="loading">
+                <div class="spinner"></div>
+                <div class="loading-text">Loading match details...</div>
+            </div>
+        </main>
 
-      <!-- Content -->
-      <main class="container" id="content" role="main">
-        <div class="loading" id="loading">
-          <div class="spinner"></div>
-          <div class="loading-text">Loading match details...</div>
-        </div>
-        <!-- Tab content will be populated here -->
-      </main>
-
-      <!-- Toast Container -->
-      <div id="toastContainer"></div>
+        <!-- Toast Container -->
+        <div id="toastContainer"></div>
     </div>
+    
+    <!-- ===== AD SLOT: Adsterra Social Bar (Mobile Sticky Top) ===== -->
+    <!-- This will be inserted by TitikAdsManager.insertAdsterraSocialBar() -->
+    
+    <!-- ===== AD SLOT: Popunder (Adsterra or PopCash) ===== -->
+    <!-- Scripts injected by TitikAdsManager.initPopunders() -->
+    
+    <!-- ===== AD SLOT: Monetag Interstitial ===== -->
+    <!-- Script injected by TitikAdsManager.initInterstitial() -->
 
-    <!-- ===== MODULAR JAVASCRIPT FILES ===== -->
+    <!-- ===== JAVASCRIPT LOADING ORDER ===== -->
     
     <!-- 1. Configuration -->
     <script src="js/match-details/config/app-config.js"></script>
@@ -95,9 +236,122 @@
     <script src="js/match-details/components/video-controls.js"></script>
     <script src="js/match-details/components/renderer.js"></script>
     
-    <!-- 5. Main Application (must be last) -->
+    <!-- 5. Main Application -->
     <script src="js/match-details/app.js"></script>
     
-    <!-- 6. Ads Manager (optional) -->
-  </body>
+    <!-- ===== 6. ADS MANAGER (MUST BE LAST) ===== -->
+    <script src="js/match-details/ads/titik-ads-manager.js"></script>
+    
+    <!-- ===== ALTERNATIVE: Inline Ads Manager ===== -->
+    <!-- If you prefer inline, uncomment below and remove external script -->
+    <!--
+    <script>
+        // Paste the entire TitikAdsManager code here
+        // Don't forget to replace all YOUR_ZONE_ID placeholders
+    </script>
+    -->
+</body>
 </html>
+
+<!-- 
+===== SETUP CHECKLIST =====
+
+□ 1. GET ZONE IDs / KEYS from each ad network:
+   ExoClick:
+   - Video Pre-Roll Zone ID
+   - Banner 300x250 Zone ID
+   - VAST Tag URL
+   
+   Adsterra:
+   - Social Bar Key
+   - Banner 300x250 Key
+   - Popunder Key
+   
+   Monetag:
+   - Banner 300x250 Zone ID
+   - Interstitial Zone ID
+   - Smart Link URL
+   
+   PopCash:
+   - Site ID
+
+□ 2. REPLACE placeholders in titik-ads-manager.js:
+   - Find: YOUR_EXOCLICK_VIDEO_ZONE_ID
+   - Find: YOUR_EXOCLICK_BANNER_ZONE_ID
+   - Find: YOUR_SOCIAL_BAR_KEY
+   - Find: YOUR_BANNER_KEY
+   - Find: YOUR_POPUNDER_KEY
+   - Find: YOUR_MONETAG_ZONE_ID
+   - Find: YOUR_INTERSTITIAL_ZONE_ID
+   - Find: YOUR_POPCASH_SITE_ID
+
+□ 3. SET TESTING WEEK:
+   - Week 1: config.testingWeek = 1
+   - Week 2: config.testingWeek = 2
+
+□ 4. DEPLOY & TEST:
+   - Test on mobile device
+   - Test on desktop
+   - Check console for ad confirmations
+   - Verify pre-roll plays before video
+   - Confirm popunder shows once per session
+   - Check interstitial frequency (3 minutes)
+
+□ 5. MONITOR REVENUE:
+   - Compare CPM rates in dashboards
+   - Track fill rates
+   - Analyze Week 1 vs Week 2 popunder performance
+   - Keep the better performing popunder
+
+===== TROUBLESHOOTING =====
+
+If Pre-Roll doesn't show:
+- Check Google IMA SDK loaded (console: google.ima)
+- Verify VAST tag URL is correct
+- Check browser console for IMA errors
+- Test with different browsers
+
+If Banners don't load:
+- Verify Zone IDs are correct
+- Check ad network dashboards for approval status
+- Disable ad blockers during testing
+- Check browser console for script errors
+
+If Popunders don't work:
+- Check browser popup blocker settings
+- Verify only ONE popunder script is active (Week 1 or 2)
+- Clear sessionStorage and test again
+- Check ad network dashboards for issues
+
+If Interstitial too frequent:
+- Adjust config.monetag.interstitial.frequency
+- Default is 180000 (3 minutes)
+- Recommended: 180000-300000 (3-5 minutes)
+
+===== REVENUE OPTIMIZATION TIPS =====
+
+1. PRE-ROLL:
+   - Keep skip time at 5 seconds (balance UX vs revenue)
+   - Max duration 10 seconds is optimal
+   - Higher CPM but may affect user retention
+
+2. BANNERS:
+   - Place above the fold for better viewability
+   - 300x250 is standard high-CPM size
+   - Don't overload (3-4 banners max per page)
+
+3. POPUNDERS:
+   - Test Adsterra vs PopCash for 1 week each
+   - Keep frequency at 1x per session
+   - Monitor bounce rate impact
+
+4. INTERSTITIALS:
+   - 3-5 minute intervals recommended
+   - Don't show on first page load
+   - Higher CPM but can annoy users
+
+5. TESTING:
+   - Run A/B tests for placement
+   - Monitor CTR and CPM weekly
+   - Adjust based on performance data
+-->
