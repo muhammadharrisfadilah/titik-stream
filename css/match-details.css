@@ -1083,3 +1083,66 @@ body {
 .debug-close:hover {
     background: #ff2e43;
 }
+
+/* User Interaction Overlay */
+#user-interaction-overlay {
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Video Controls */
+.video-controls-bar {
+    background: rgba(0, 0, 0, 0.8);
+    padding: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.control-btn {
+    background: #FF6600;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+    margin: 0 5px;
+}
+
+.time-display {
+    color: white;
+    font-family: monospace;
+    margin: 0 10px;
+}
+
+/* Stream Info Overlay */
+.stream-info-overlay {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    display: flex;
+    gap: 5px;
+}
+
+.stream-type-badge, .live-badge {
+    background: rgba(0, 0, 0, 0.7);
+    color: white;
+    padding: 4px 8px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+.live-badge {
+    background: #FF0000;
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}

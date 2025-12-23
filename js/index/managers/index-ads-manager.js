@@ -24,18 +24,7 @@ const IndexAdsManager = {
         // Adsterra Configuration
         adsterra: {
             enabled: true,
-            socialBar: {
-                key: 'b21c1257f50088499518aab87554e695',
-                src: 'https://pl28309380.effectivegatecpm.com/b2/1c/12/b21c1257f50088499518aab87554e695.js'
-            },
-            banner300x250: {
-                key: '707574124dfaef6d1465933d66c2b798',
-                src: 'https://www.highperformanceformat.com/707574124dfaef6d1465933d66c2b798/invoke.js'
-            },
-            nativeBanner: {
-                key: 'c8027cc775eb8ebb7bf3c328775d7da6',
-                src: 'https://pl28309681.effectivegatecpm.com/c8027cc775eb8ebb7bf3c328775d7da6/invoke.js'
-            },
+          
             popunder: {
                 enabled: false, // Auto-managed by testingWeek
                 key: 'fe017b7e181ae09745827246c3e1df88',
@@ -46,17 +35,11 @@ const IndexAdsManager = {
         // Monetag Configuration
         monetag: {
             enabled: true,
-            banner300x250: {
-                zoneId: 'YOUR_MONETAG_ZONE_ID'
-            },
+        
             smartLink: {
                 url: 'https://otieu.com/4/10360280',
                 clicksRequired: 2
             },
-            interstitial: {
-                zoneId: 'YOUR_INTERSTITIAL_ZONE_ID',
-                frequency: 240000 // 4 minutes (less aggressive for homepage)
-            }
         },
         
         // PopCash Configuration
@@ -66,20 +49,6 @@ const IndexAdsManager = {
             frequency: 86400000 // 24 hours
         },
         
-        // Native Ads (In-feed between leagues)
-        nativeAds: {
-            enabled: true,
-            frequency: 4, // Insert ad every 4 league sections
-            alternateTypes: true
-        },
-        
-        // Sticky Banner
-        stickyBanner: {
-            enabled: true,
-            position: 'bottom', // 'top' or 'bottom'
-            showAfter: 3000, // Show after 3 seconds
-            closeButton: true
-        },
         
         // General Settings
         isMobile: window.innerWidth <= 768,
@@ -107,19 +76,11 @@ const IndexAdsManager = {
         this.checkPopunderStatus();
         
         // Initialize banner ads
-        this.initBannerAds();
         
         // Initialize native ads (in-feed)
-        this.initNativeAds();
         
         // Initialize popunders
         this.initPopunders();
-        
-        // Initialize interstitial
-        this.initInterstitial();
-        
-        // Initialize sticky banner
-        this.initStickyBanner();
         
         // Setup smartlink click interceptor
         this.setupSmartlinkInterceptor();
@@ -146,29 +107,6 @@ const IndexAdsManager = {
     },
     
     // ===== BANNER ADS =====
-    initBannerAds() {
-        console.log('📰 Initializing Banner Ads...');
-        
-        // Adsterra Social Bar (mobile sticky top)
-        if (this.config.adsterra.enabled && this.config.isMobile) {
-            this.insertAdsterraSocialBar();
-        }
-        
-        // ExoClick Leaderboard (desktop top)
-        if (this.config.exoclick.enabled && !this.config.isMobile) {
-            this.insertExoClickLeaderboard();
-        }
-        
-        // ExoClick Banner 300x250 (before matches)
-        if (this.config.exoclick.enabled) {
-            setTimeout(() => this.insertExoClickBannerTop(), 500);
-        }
-        
-        // Monetag Banner (after date navigation)
-        if (this.config.monetag.enabled) {
-            setTimeout(() => this.insertMonetagBanner(), 1000);
-        }
-    },
     
     insertAdsterraSocialBar() {
         const banner = document.createElement('div');
@@ -206,171 +144,7 @@ const IndexAdsManager = {
         console.log('✅ Adsterra Social Bar inserted');
     },
     
-    insertExoClickLeaderboard() {
-        const header = document.querySelector('.header');
-        if (!header) return;
-        
-        const banner = document.createElement('div');
-        banner.className = 'ad-banner-container exoclick-leaderboard';
-        banner.style.cssText = 'text-align: center; background: #f8f8f8; padding: 12px; margin: 0;';
-        banner.innerHTML = `
-            <div class="ad-label">Advertisement</div>
-            <div id="exoclick-leaderboard-728x90"></div>
-        `;
-        header.parentElement.insertBefore(banner, header.nextSibling);
-        
-        const script = document.createElement('script');
-        script.async = true;
-        script.dataset.cfasync = 'false';
-        script.dataset.adel = 'atag';
-        script.src = `${this.config.exoclick.banner728x90.script}?idzone=${this.config.exoclick.banner728x90.zoneId}`;
-        document.getElementById('exoclick-leaderboard-728x90').appendChild(script);
-        
-        console.log('✅ ExoClick Leaderboard inserted');
-    },
     
-    insertExoClickBannerTop() {
-        const dateNav = document.getElementById('dateNav');
-        if (!dateNav) return;
-        
-        const banner = document.createElement('div');
-        banner.className = 'ad-banner-container exoclick-banner';
-        banner.innerHTML = `
-            <div class="ad-label">Advertisement</div>
-            <div id="exoclick-banner-top" style="min-height: 250px; display: flex; align-items: center; justify-content: center;"></div>
-        `;
-        dateNav.parentElement.insertBefore(banner, dateNav.nextSibling);
-        
-        const script = document.createElement('script');
-        script.async = true;
-        script.dataset.cfasync = 'false';
-        script.dataset.adel = 'atag';
-        script.src = `${this.config.exoclick.banner300x250.script}?idzone=${this.config.exoclick.banner300x250.zoneId}`;
-        document.getElementById('exoclick-banner-top').appendChild(script);
-        
-        console.log('✅ ExoClick Banner Top inserted');
-    },
-    
-    insertMonetagBanner() {
-        const filterTabs = document.getElementById('filterTabs');
-        if (!filterTabs) return;
-        
-        const banner = document.createElement('div');
-        banner.className = 'ad-banner-container monetag-banner';
-        banner.innerHTML = `
-            <div class="ad-label">Advertisement</div>
-            <div id="monetag-banner-top" style="width: 300px; height: 250px; margin: 0 auto;"></div>
-        `;
-        filterTabs.parentElement.insertBefore(banner, filterTabs.nextSibling);
-        
-        const script = document.createElement('script');
-        script.async = true;
-        script.dataset.cfasync = 'false';
-        script.src = `//www.topcreativeformat.com/${this.config.monetag.banner300x250.zoneId}/invoke.js`;
-        document.getElementById('monetag-banner-top').appendChild(script);
-        
-        console.log('✅ Monetag Banner inserted');
-    },
-    
-    // ===== NATIVE ADS (IN-FEED) =====
-    initNativeAds() {
-        if (!this.config.nativeAds.enabled) return;
-        
-        // Wait for matches to be rendered
-        const observer = new MutationObserver((mutations) => {
-            const leagueSections = document.querySelectorAll('.league-section');
-            if (leagueSections.length > 0 && this.state.nativeAdsInserted === 0) {
-                this.insertNativeAds();
-                observer.disconnect();
-            }
-        });
-        
-        observer.observe(document.getElementById('content'), {
-            childList: true,
-            subtree: true
-        });
-        
-        // Fallback: Try after 2 seconds if observer doesn't trigger
-        setTimeout(() => {
-            if (this.state.nativeAdsInserted === 0) {
-                this.insertNativeAds();
-            }
-        }, 2000);
-    },
-    
-    insertNativeAds() {
-        const leagueSections = document.querySelectorAll('.league-section');
-        if (leagueSections.length === 0) return;
-        
-        const frequency = this.config.nativeAds.frequency;
-        let adCount = 0;
-        
-        leagueSections.forEach((section, index) => {
-            // Insert ad after every Nth league
-            if ((index + 1) % frequency === 0 && index > 0) {
-                const adType = this.config.nativeAds.alternateTypes && adCount % 2 === 0
-                    ? 'adsterra'
-                    : 'exoclick';
-                
-                const banner = this.createNativeBanner(adType, adCount);
-                section.parentElement.insertBefore(banner, section.nextSibling);
-                
-                adCount++;
-                this.state.nativeAdsInserted++;
-            }
-        });
-        
-        console.log(`✅ ${this.state.nativeAdsInserted} Native Ads inserted`);
-    },
-    
-    createNativeBanner(type, index) {
-        const banner = document.createElement('div');
-        banner.className = 'ad-banner-container native-ad';
-        banner.style.margin = '16px 8px';
-        
-        if (type === 'adsterra') {
-            banner.innerHTML = `
-                <div class="ad-label">Advertisement</div>
-                <div id="adsterra-native-${index}"></div>
-            `;
-            
-            setTimeout(() => {
-                const script = document.createElement('script');
-                script.type = 'text/javascript';
-                script.innerHTML = `
-                    atOptions = {
-                        'key': '${this.config.adsterra.nativeBanner.key}',
-                        'format': 'iframe',
-                        'height': 250,
-                        'width': 300,
-                        'params': {}
-                    };
-                `;
-                document.getElementById(`adsterra-native-${index}`).appendChild(script);
-                
-                const invokeScript = document.createElement('script');
-                invokeScript.type = 'text/javascript';
-                invokeScript.src = this.config.adsterra.nativeBanner.src;
-                document.getElementById(`adsterra-native-${index}`).appendChild(invokeScript);
-            }, 300);
-        } else {
-            banner.innerHTML = `
-                <div class="ad-label">Advertisement</div>
-                <div id="exoclick-native-${index}" style="min-height: 250px;"></div>
-            `;
-            
-            setTimeout(() => {
-                const script = document.createElement('script');
-                script.async = true;
-                script.dataset.cfasync = 'false';
-                script.dataset.adel = 'atag';
-                script.src = `${this.config.exoclick.banner300x250.script}?idzone=${this.config.exoclick.banner300x250.zoneId}`;
-                document.getElementById(`exoclick-native-${index}`).appendChild(script);
-            }, 300);
-        }
-        
-        return banner;
-    },
     
     // ===== POPUNDER ADS =====
     checkPopunderStatus() {
@@ -462,127 +236,6 @@ const IndexAdsManager = {
         document.body.appendChild(script);
     },
     
-    // ===== INTERSTITIAL ADS =====
-    initInterstitial() {
-        if (!this.config.monetag.enabled) return;
-        
-        const script = document.createElement('script');
-        script.innerHTML = `
-            (function(d,z,s){
-                s.src='https://'+d+'/400/'+z;
-                try{
-                    (document.body||document.documentElement).appendChild(s)
-                }catch(e){}
-            })('groleegni.net',${this.config.monetag.interstitial.zoneId},document.createElement('script'))
-        `;
-        document.body.appendChild(script);
-        
-        // Schedule interstitial
-        this.state.interstitialTimer = setInterval(() => {
-            console.log('🎯 Triggering Interstitial Ad');
-        }, this.config.monetag.interstitial.frequency);
-        
-        console.log('✅ Monetag Interstitial initialized');
-    },
-    
-    // ===== STICKY BANNER =====
-    initStickyBanner() {
-        if (!this.config.stickyBanner.enabled) return;
-        
-        setTimeout(() => {
-            this.showStickyBanner();
-        }, this.config.stickyBanner.showAfter);
-    },
-    
-    showStickyBanner() {
-        if (this.state.stickyBannerShown) return;
-        
-        const position = this.config.stickyBanner.position;
-        const isBottom = position === 'bottom';
-        
-        const sticky = document.createElement('div');
-        sticky.id = 'sticky-banner';
-        sticky.style.cssText = `
-            position: fixed;
-            ${isBottom ? 'bottom: 60px;' : 'top: 50px;'}
-            left: 0;
-            right: 0;
-            z-index: 9998;
-            background: white;
-            box-shadow: ${isBottom ? '0 -2px 8px rgba(0,0,0,0.1)' : '0 2px 8px rgba(0,0,0,0.1)'};
-            padding: 8px;
-            text-align: center;
-            transform: translateY(${isBottom ? '100%' : '-100%'});
-            transition: transform 0.3s ease;
-        `;
-        
-        // Close button
-        if (this.config.stickyBanner.closeButton) {
-            const closeBtn = document.createElement('button');
-            closeBtn.innerHTML = '✕';
-            closeBtn.style.cssText = `
-                position: absolute;
-                top: 4px;
-                right: 4px;
-                background: rgba(0,0,0,0.5);
-                color: white;
-                border: none;
-                border-radius: 50%;
-                width: 24px;
-                height: 24px;
-                cursor: pointer;
-                font-size: 12px;
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                z-index: 10;
-            `;
-            closeBtn.onclick = () => {
-                sticky.style.transform = `translateY(${isBottom ? '100%' : '-100%'})`;
-                setTimeout(() => sticky.remove(), 300);
-            };
-            sticky.appendChild(closeBtn);
-        }
-        
-        // Banner content
-        const bannerContent = document.createElement('div');
-        bannerContent.innerHTML = `
-            <div class="ad-label" style="font-size: 10px; color: #999; margin-bottom: 4px;">Advertisement</div>
-            <div id="sticky-banner-content"></div>
-        `;
-        sticky.appendChild(bannerContent);
-        
-        document.body.appendChild(sticky);
-        
-        // Animate in
-        setTimeout(() => {
-            sticky.style.transform = 'translateY(0)';
-        }, 100);
-        
-        // Load ad
-        setTimeout(() => {
-            const script = document.createElement('script');
-            script.type = 'text/javascript';
-            script.innerHTML = `
-                atOptions = {
-                    'key': '${this.config.adsterra.banner300x250.key}',
-                    'format': 'iframe',
-                    'height': 50,
-                    'width': 320,
-                    'params': {}
-                };
-            `;
-            document.getElementById('sticky-banner-content').appendChild(script);
-            
-            const invokeScript = document.createElement('script');
-            invokeScript.type = 'text/javascript';
-            invokeScript.src = this.config.adsterra.banner300x250.src;
-            document.getElementById('sticky-banner-content').appendChild(invokeScript);
-        }, 200);
-        
-        this.state.stickyBannerShown = true;
-        console.log('✅ Sticky Banner shown');
-    },
     
     // ===== SMARTLINK CLICK INTERCEPTOR =====
     setupSmartlinkInterceptor() {

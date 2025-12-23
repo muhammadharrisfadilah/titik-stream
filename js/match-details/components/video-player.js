@@ -45,6 +45,11 @@ const VideoPlayer = {
         try {
             await VideoService.initialize(streamingUrl, streamType, this.videoElement, this.container);
             this.setupEventListeners();
+            
+            // Video siap, tapi JANGAN auto-play
+            // Biarkan TitikAdsManager yang mengontrol playback
+            console.log('✅ Video player ready (paused)');
+            
         } catch (error) {
             console.error(`❌ Failed to initialize ${streamType} player:`, error);
             Helpers.handlePlayerError(
@@ -96,7 +101,7 @@ const VideoPlayer = {
     renderPlayer(streamType) {
         this.container.innerHTML = `
             <div class="video-wrapper">
-                <video id="videoElement" controls playsinline autoplay muted style="width: 100%; height: 100%; background: #000;"></video>
+                <video id="videoElement" controls playsinline style="width: 100%; height: 100%; background: #000;"></video>
                 <div class="stream-info-overlay">
                     <span class="stream-type-badge">${streamType.toUpperCase()}</span>
                     <span class="live-badge">🔴 LIVE</span>
@@ -104,7 +109,7 @@ const VideoPlayer = {
             </div>
             <div class="video-controls-bar">
                 <div class="controls-left">
-                    <button onclick="VideoControls.togglePlayPause()" class="control-btn" id="playPauseBtn">⏸️</button>
+                    <button onclick="VideoControls.togglePlayPause()" class="control-btn" id="playPauseBtn">▶️</button>
                     <button onclick="VideoControls.toggleMute()" class="control-btn" id="muteBtn">🔇</button>
                     <span class="time-display" id="timeDisplay">00:00</span>
                 </div>

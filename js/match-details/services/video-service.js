@@ -29,9 +29,8 @@ const VideoService = {
                 hls.attachMedia(videoElement);
                 
                 hls.on(Hls.Events.MANIFEST_PARSED, function() {
-                    videoElement.play().catch(err => {
-                        console.log('Auto-play prevented (HLS):', err);
-                    });
+                    // JANGAN auto-play di sini
+                    console.log('✅ HLS Manifest parsed, ready for playback');
                 });
 
                 hls.on(Hls.Events.ERROR, function (event, data) {
@@ -53,7 +52,7 @@ const VideoService = {
             // Native HLS support (Safari, iOS)
             videoElement.src = streamingUrl;
             videoElement.addEventListener('loadedmetadata', function() {
-                videoElement.play().catch(err => console.log('Auto-play prevented (Native HLS):', err));
+                console.log('✅ Native HLS loaded, ready for playback');
             });
             console.log('✅ Native HLS Player initialized successfully');
             return null;
@@ -85,9 +84,8 @@ const VideoService = {
             flvPlayer.load();
             
             flvPlayer.on(flvjs.Events.LOADING_COMPLETE, () => {
-                videoElement.play().catch(err => {
-                    console.log('Auto-play prevented:', err);
-                });
+                // JANGAN auto-play di sini
+                console.log('✅ FLV stream loaded, ready for playback');
             });
 
             flvPlayer.on(flvjs.Events.ERROR, (errorType, errorDetail) => {
@@ -109,8 +107,7 @@ const VideoService = {
     async initializeMP4(streamingUrl, videoElement) {
         videoElement.src = streamingUrl;
         videoElement.load();
-        videoElement.play().catch(err => console.log('Auto-play prevented (MP4):', err));
-        console.log('✅ MP4 Player initialized successfully');
+        console.log('✅ MP4 Player initialized (paused)');
         return null;
     },
     
