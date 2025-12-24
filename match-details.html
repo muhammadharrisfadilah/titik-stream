@@ -3,7 +3,36 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TITIK SPORTS - Match Details (with Ads)</title>
+    
+    <!-- ===== Dynamic SEO Tags (Updated by JS) ===== -->
+    <title id="pageTitle">TITIK SPORTS - Live Match</title>
+    <meta name="description" id="pageDescription" content="Watch live football match with multiple stream options and HD quality">
+    <meta name="keywords" content="live streaming, football match, soccer live, hd stream, free streaming">
+    <meta name="robots" content="index, follow">
+    
+    <!-- ===== Open Graph ===== -->
+    <meta property="og:type" content="video.other">
+    <meta property="og:url" id="ogUrl" content="https://titiksports.pages.dev/match-details.html">
+    <meta property="og:title" id="ogTitle" content="Live Match - TITIK SPORTS">
+    <meta property="og:description" id="ogDescription" content="Watch live football match">
+    <meta property="og:image" content="https://titiksports.pages.dev/logo.png">
+    <meta property="og:site_name" content="TITIK SPORTS">
+    
+    <!-- ===== Twitter Card ===== -->
+    <meta name="twitter:card" content="player">
+    <meta name="twitter:url" id="twitterUrl" content="https://titiksports.pages.dev/match-details.html">
+    <meta name="twitter:title" id="twitterTitle" content="Live Match - TITIK SPORTS">
+    <meta name="twitter:description" id="twitterDescription" content="Watch live football match">
+    <meta name="twitter:image" content="https://titiksports.pages.dev/logo.png">
+    
+    <!-- ===== PWA ===== -->
+    <meta name="theme-color" content="#ff6600">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="TITIK SPORTS">
+    <link rel="apple-touch-icon" href="/logo.png">
+    <link rel="manifest" href="/manifest.json">
     
     <!-- Original CSS -->
     <link rel="stylesheet" href="css/match-details.css">
@@ -33,9 +62,12 @@
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         
-        /* Add padding to body when social bar is active */
         body.has-social-bar {
             padding-top: 50px;
+        }
+        
+        body.has-social-bar .header {
+            top: 50px;
         }
         
         /* ===== MONETAG BANNER ===== */
@@ -54,19 +86,16 @@
                 margin: 12px 8px;
             }
             
-            /* Hide desktop-only banners */
             .adsterra-banner {
                 display: none;
             }
         }
         
         @media (min-width: 769px) {
-            /* Hide mobile-only elements */
             #adsterra-social-bar {
                 display: none;
             }
             
-            /* Desktop banner positioning */
             .adsterra-banner {
                 float: right;
                 margin: 16px;
@@ -96,7 +125,6 @@
             z-index: 1000;
         }
         
-        /* Skip button styling (already in JS but can be enhanced) */
         .skip-ad-button {
             position: absolute;
             top: 10px;
@@ -142,6 +170,8 @@
             to { transform: rotate(360deg); }
         }
     </style>
+    
+    <!-- Delegate Client Hints for ExoClick -->
     <meta http-equiv="Delegate-CH" content="Sec-CH-UA https://s.magsrv.com; Sec-CH-UA-Mobile https://s.magsrv.com; Sec-CH-UA-Arch https://s.magsrv.com; Sec-CH-UA-Model https://s.magsrv.com; Sec-CH-UA-Platform https://s.magsrv.com; Sec-CH-UA-Platform-Version https://s.magsrv.com; Sec-CH-UA-Bitness https://s.magsrv.com; Sec-CH-UA-Full-Version-List https://s.magsrv.com; Sec-CH-UA-Full-Version https://s.magsrv.com;">
     
     <!-- ===== EXTERNAL LIBRARIES ===== -->
@@ -152,9 +182,10 @@
     <script src="https://cdn.jsdelivr.net/npm/hls.js@1.4.10/dist/hls.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/flv.js@latest/dist/flv.min.js"></script>
     
-    <!-- ===== GOOGLE IMA SDK (For Pre-Roll) ===== -->
-    <!-- This is loaded by TitikAdsManager.loadGoogleIMA() but can be preloaded -->
+    <!-- Google IMA SDK Preload -->
     <link rel="preload" href="https://imasdk.googleapis.com/js/sdkloader/ima3.js" as="script">
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>" />
 </head>
 <body>
     <div class="mobile-container">
@@ -221,6 +252,9 @@
 
     <!-- ===== JAVASCRIPT LOADING ORDER ===== -->
     
+    <!-- 🔥 NEW: Service Worker Registration (FIRST!) -->
+    <script src="sw-register.js"></script>
+    
     <!-- 1. Configuration -->
     <script src="js/match-details/config/app-config.js"></script>
     
@@ -242,117 +276,5 @@
     
     <!-- ===== 6. ADS MANAGER (MUST BE LAST) ===== -->
     <script src="js/match-details/ads/titik-ads-manager.js"></script>
-    
-    <!-- ===== ALTERNATIVE: Inline Ads Manager ===== -->
-    <!-- If you prefer inline, uncomment below and remove external script -->
-    <!--
-    <script>
-        // Paste the entire TitikAdsManager code here
-        // Don't forget to replace all YOUR_ZONE_ID placeholders
-    </script>
-    -->
 </body>
 </html>
-
-<!-- 
-===== SETUP CHECKLIST =====
-
-□ 1. GET ZONE IDs / KEYS from each ad network:
-   ExoClick:
-   - Video Pre-Roll Zone ID
-   - Banner 300x250 Zone ID
-   - VAST Tag URL
-   
-   Adsterra:
-   - Social Bar Key
-   - Banner 300x250 Key
-   - Popunder Key
-   
-   Monetag:
-   - Banner 300x250 Zone ID
-   - Interstitial Zone ID
-   - Smart Link URL
-   
-   PopCash:
-   - Site ID
-
-□ 2. REPLACE placeholders in titik-ads-manager.js:
-   - Find: YOUR_EXOCLICK_VIDEO_ZONE_ID
-   - Find: YOUR_EXOCLICK_BANNER_ZONE_ID
-   - Find: YOUR_SOCIAL_BAR_KEY
-   - Find: YOUR_BANNER_KEY
-   - Find: YOUR_POPUNDER_KEY
-   - Find: YOUR_MONETAG_ZONE_ID
-   - Find: YOUR_INTERSTITIAL_ZONE_ID
-   - Find: YOUR_POPCASH_SITE_ID
-
-□ 3. SET TESTING WEEK:
-   - Week 1: config.testingWeek = 1
-   - Week 2: config.testingWeek = 2
-
-□ 4. DEPLOY & TEST:
-   - Test on mobile device
-   - Test on desktop
-   - Check console for ad confirmations
-   - Verify pre-roll plays before video
-   - Confirm popunder shows once per session
-   - Check interstitial frequency (3 minutes)
-
-□ 5. MONITOR REVENUE:
-   - Compare CPM rates in dashboards
-   - Track fill rates
-   - Analyze Week 1 vs Week 2 popunder performance
-   - Keep the better performing popunder
-
-===== TROUBLESHOOTING =====
-
-If Pre-Roll doesn't show:
-- Check Google IMA SDK loaded (console: google.ima)
-- Verify VAST tag URL is correct
-- Check browser console for IMA errors
-- Test with different browsers
-
-If Banners don't load:
-- Verify Zone IDs are correct
-- Check ad network dashboards for approval status
-- Disable ad blockers during testing
-- Check browser console for script errors
-
-If Popunders don't work:
-- Check browser popup blocker settings
-- Verify only ONE popunder script is active (Week 1 or 2)
-- Clear sessionStorage and test again
-- Check ad network dashboards for issues
-
-If Interstitial too frequent:
-- Adjust config.monetag.interstitial.frequency
-- Default is 180000 (3 minutes)
-- Recommended: 180000-300000 (3-5 minutes)
-
-===== REVENUE OPTIMIZATION TIPS =====
-
-1. PRE-ROLL:
-   - Keep skip time at 5 seconds (balance UX vs revenue)
-   - Max duration 10 seconds is optimal
-   - Higher CPM but may affect user retention
-
-2. BANNERS:
-   - Place above the fold for better viewability
-   - 300x250 is standard high-CPM size
-   - Don't overload (3-4 banners max per page)
-
-3. POPUNDERS:
-   - Test Adsterra vs PopCash for 1 week each
-   - Keep frequency at 1x per session
-   - Monitor bounce rate impact
-
-4. INTERSTITIALS:
-   - 3-5 minute intervals recommended
-   - Don't show on first page load
-   - Higher CPM but can annoy users
-
-5. TESTING:
-   - Run A/B tests for placement
-   - Monitor CTR and CPM weekly
-   - Adjust based on performance data
--->

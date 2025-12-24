@@ -138,6 +138,97 @@ const App = {
             this.elements.matchHeader.innerHTML = Renderer.renderHeader(this.state.data);
         }
     },
+
+    // ===== DYNAMIC SEO META TAG UPDATER =====
+// ADD THIS FUNCTION TO js/match-details/app.js
+
+// Add this inside the App object, after renderHeader() method
+
+// Update page meta tags dynamically
+updatePageMeta(data) {
+    try {
+        const homeTeam = data.header?.teams?.[0]?.name || 'Home';
+        const awayTeam = data.header?.teams?.[1]?.name || 'Away';
+        const league = data.general?.leagueName || 'Football Match';
+        const matchId = this.state.matchId;
+        
+        // Update title
+        const titleElement = document.getElementById('pageTitle');
+        if (titleElement) {
+            titleElement.textContent = `${homeTeam} vs ${awayTeam} - Live Stream | TITIK SPORTS`;
+        } else {
+            document.title = `${homeTeam} vs ${awayTeam} - Live Stream | TITIK SPORTS`;
+        }
+        
+        // Update description
+        const description = `Watch ${homeTeam} vs ${awayTeam} live streaming in ${league}. Multiple HD stream sources available. Free online football streaming.`;
+        const descElement = document.getElementById('pageDescription');
+        if (descElement) {
+            descElement.content = description;
+        }
+        
+        // Update Open Graph tags
+        const ogUrl = document.getElementById('ogUrl');
+        if (ogUrl) {
+            ogUrl.content = `https://titiksports.pages.dev/match-details.html?matchId=${matchId}`;
+        }
+        
+        const ogTitle = document.getElementById('ogTitle');
+        if (ogTitle) {
+            ogTitle.content = `${homeTeam} vs ${awayTeam} - Live Now`;
+        }
+        
+        const ogDesc = document.getElementById('ogDescription');
+        if (ogDesc) {
+            ogDesc.content = description;
+        }
+        
+        // Update Twitter tags
+        const twitterUrl = document.getElementById('twitterUrl');
+        if (twitterUrl) {
+            twitterUrl.content = `https://titiksports.pages.dev/match-details.html?matchId=${matchId}`;
+        }
+        
+        const twitterTitle = document.getElementById('twitterTitle');
+        if (twitterTitle) {
+            twitterTitle.content = `${homeTeam} vs ${awayTeam} - Live`;
+        }
+        
+        const twitterDesc = document.getElementById('twitterDescription');
+        if (twitterDesc) {
+            twitterDesc.content = description;
+        }
+        
+        console.log('✅ Meta tags updated for SEO');
+        
+    } catch (error) {
+        console.error('❌ Failed to update meta tags:', error);
+    }
+},
+
+// THEN UPDATE THE render() METHOD TO CALL THIS:
+
+// Find the render() method (around line 128) and UPDATE IT:
+
+render() {
+    console.log('🎨 [RENDER] Starting render...');
+    console.log('📊 [RENDER] Current state.data:', this.state.data);
+    
+    try {
+        this.renderHeader();
+        this.renderTabContent();
+        this.updateTabButtons();
+        
+        // 🔥 NEW: Update meta tags for SEO
+        this.updatePageMeta(this.state.data);
+        
+        console.log('✅ [RENDER] Render complete');
+    } catch (error) {
+        console.error('❌ [RENDER] Render error:', error);
+    }
+},
+
+// That's it! Now every time match data loads, SEO tags will be updated automatically.
     
     // Render tab content
     renderTabContent() {

@@ -1,4 +1,4 @@
-// ===== SUPABASE SERVICE =====
+// ===== SUPABASE SERVICE - UPDATED FOR MULTI-STREAM =====
 
 const SupabaseService = {
     client: null,
@@ -76,8 +76,8 @@ const SupabaseService = {
         }
     },
     
-    // Get streaming link from Supabase
-    async getStreamingLink(matchId) {
+    // Get streaming data (RETURNS FULL DATA WITH ALL SOURCES)
+    async getStreamingData(matchId) {
         if (!this.client) {
             console.error('❌ Supabase not initialized');
             return null;
@@ -89,34 +89,38 @@ const SupabaseService = {
             // Query live_streams table
             const { data, error } = await this.client
                 .from('live_streams')
-                .select('sources, is_live, home_team, away_team, league')
+                .select('sources, is_live, home_team, away_team, league, match_id')
                 .eq('match_id', matchId)
-                .single();
+                .maybeSingle();
 
             if (error) {
                 console.log('ℹ️ Supabase error:', error);
                 
                 // Try matches table as fallback
                 if (error.code === 'PGRST116') {
-                    console.log(`ℹ️ No streaming data found in live_streams for match ID: ${matchId}`);
+                    console.log(`ℹ️ No data in live_streams, trying matches table...`);
                     
                     const { data: altData, error: altError } = await this.client
                         .from('matches')
-                        .select('link_streaming')
+                        .select('link_streaming, match_id')
                         .eq('match_id', matchId)
                         .maybeSingle();
                     
-                    if (altError) {
+                    if (altError || !altData || !altData.link_streaming) {
                         console.log('ℹ️ No streaming available for this match');
                         return null;
                     }
                     
-                    if (altData && altData.link_streaming) {
-                        console.log('✅ Streaming link found in matches table');
-                        return altData.link_streaming;
-                    }
-                    
-                    return null;
+                    // Convert single URL to sources array format
+                    console.log('✅ Streaming link found in matches table');
+                    return {
+                        match_id: matchId,
+                        sources: [{
+                            type: this.detectStreamType(altData.link_streaming),
+                            source: altData.link_streaming
+                        }],
+                        is_live: true
+                    };
                 }
                 
                 throw error;
@@ -124,47 +128,73 @@ const SupabaseService = {
 
             console.log('📦 Stream data from Supabase:', data);
 
+            // Validate data
+            if (!data) {
+                console.log('ℹ️ Match not found in database');
+                return null;
+            }
+
             // Check if we have sources
-            if (!data || !data.sources || !Array.isArray(data.sources) || data.sources.length === 0) {
+            if (!data.sources || !Array.isArray(data.sources) || data.sources.length === 0) {
                 console.log('ℹ️ Match found but no streaming sources');
                 return null;
             }
 
-            // Select the best source
-            const bestSource = this.selectBestSource(data.sources);
-            
-            if (bestSource && bestSource.source) {
-                console.log(`✅ Streaming link found: ${bestSource.type} - ${bestSource.source.substring(0, 80)}...`);
-                return bestSource.source;
-            } else {
-                console.log('⚠️ No valid streaming source found');
+            // Filter out invalid sources
+            const validSources = data.sources.filter(source => 
+                source && 
+                source.source && 
+                typeof source.source === 'string' &&
+                source.source.length > 10 && // Min URL length
+                (source.source.startsWith('http://') || source.source.startsWith('https://'))
+            );
+
+            if (validSources.length === 0) {
+                console.log('⚠️ No valid streaming sources found');
                 return null;
             }
 
+            console.log(`✅ Found ${validSources.length} valid stream source(s)`);
+            
+            return {
+                match_id: data.match_id,
+                sources: validSources,
+                is_live: data.is_live !== false, // Default to true if not specified
+                home_team: data.home_team,
+                away_team: data.away_team,
+                league: data.league
+            };
+
         } catch (error) {
-            console.error('❌ Exception while fetching streaming link:', error);
+            console.error('❌ Exception while fetching streaming data:', error);
             return null;
         }
     },
     
-    // Select best streaming source
-    selectBestSource(sources) {
-        if (!sources || !Array.isArray(sources)) return null;
+    // Detect stream type from URL
+    detectStreamType(url) {
+        if (!url) return 'UNKNOWN';
         
-        // Sort by preference: HLS > FLV > others
-        const sortedSources = [...sources].sort((a, b) => {
-            const priority = { 'HLS': 1, 'FLV': 2, 'default': 3 };
-            const aPriority = priority[a.type] || priority.default;
-            const bPriority = priority[b.type] || priority.default;
-            return aPriority - bPriority;
-        });
+        const urlLower = url.toLowerCase();
         
-        // Find the first valid source
-        return sortedSources.find(source => 
-            source && 
-            source.source && 
-            (source.source.includes('.m3u8') || source.source.includes('.flv') || source.source.includes('http'))
-        ) || sortedSources[0];
+        if (urlLower.includes('.m3u8')) return 'HLS';
+        if (urlLower.includes('.flv')) return 'FLV';
+        if (urlLower.includes('.mp4')) return 'MP4';
+        
+        // Fallback
+        return 'HLS';
+    },
+    
+    // Legacy method - keep for backward compatibility
+    async getStreamingLink(matchId) {
+        const data = await this.getStreamingData(matchId);
+        
+        if (!data || !data.sources || data.sources.length === 0) {
+            return null;
+        }
+        
+        // Return first source URL
+        return data.sources[0].source;
     },
     
     // Debug function to check Supabase data
@@ -181,7 +211,7 @@ const SupabaseService = {
                 .from('live_streams')
                 .select('*')
                 .eq('match_id', matchId)
-                .single();
+                .maybeSingle();
                 
             if (error) {
                 console.error('Supabase debug error:', error);
@@ -190,7 +220,7 @@ const SupabaseService = {
                     .from('matches')
                     .select('*')
                     .eq('match_id', matchId)
-                    .single();
+                    .maybeSingle();
                     
                 if (matchesError) {
                     console.error('Matches table error:', matchesError);

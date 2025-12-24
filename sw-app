@@ -1,0 +1,236 @@
+// ===== SERVICE WORKER - TITIK SPORTS PWA =====
+// Version: 3.0.0
+
+const CACHE_VERSION = 'v3.0.0';
+const CACHE_NAME = `titik-sports-${CACHE_VERSION}`;
+
+// Assets to cache immediately on install
+const PRECACHE_URLS = [
+    '/',
+    '/index.html',
+    '/match-details.html',
+    '/css/style.css',
+    '/css/match-details.css',
+    '/css/ads-styles.css',
+    '/js/index/config/app-config.js',
+    '/js/index/utils/helpers.js',
+    '/logo.png',
+    '/manifest.json'
+];
+
+// Network-first resources (API calls, dynamic data)
+const NETWORK_FIRST_PATTERNS = [
+    /\/api\//,
+    /fotmob\.com\/api/,
+    /supabase\.co/,
+    /\.flv$/,
+    /\.m3u8$/
+];
+
+// Cache-first resources (static assets, images)
+const CACHE_FIRST_PATTERNS = [
+    /\.(?:png|jpg|jpeg|svg|gif|webp|ico)$/,
+    /\.(?:woff|woff2|ttf|otf|eot)$/,
+    /\/css\//,
+    /\/js\//,
+    /images\.fotmob\.com/
+];
+
+// Install event - precache essential assets
+self.addEventListener('install', (event) => {
+    console.log('[SW-APP] Installing v' + CACHE_VERSION);
+    
+    event.waitUntil(
+        caches.open(CACHE_NAME)
+            .then((cache) => {
+                console.log('[SW-APP] Precaching assets');
+                return cache.addAll(PRECACHE_URLS.map(url => new Request(url, { cache: 'reload' })));
+            })
+            .then(() => self.skipWaiting())
+            .catch((error) => {
+                console.error('[SW-APP] Precache failed:', error);
+            })
+    );
+});
+
+// Activate event - clean old caches
+self.addEventListener('activate', (event) => {
+    console.log('[SW-APP] Activating v' + CACHE_VERSION);
+    
+    event.waitUntil(
+        caches.keys()
+            .then((cacheNames) => {
+                return Promise.all(
+                    cacheNames
+                        .filter((cacheName) => cacheName.startsWith('titik-sports-') && cacheName !== CACHE_NAME)
+                        .map((cacheName) => {
+                            console.log('[SW-APP] Deleting old cache:', cacheName);
+                            return caches.delete(cacheName);
+                        })
+                );
+            })
+            .then(() => self.clients.claim())
+    );
+});
+
+// Fetch event - handle requests with appropriate strategy
+self.addEventListener('fetch', (event) => {
+    const { request } = event;
+    const url = new URL(request.url);
+    
+    // Skip non-GET requests
+    if (request.method !== 'GET') {
+        return;
+    }
+    
+    // Skip non-http protocols
+    if (!url.protocol.startsWith('http')) {
+        return;
+    }
+    
+    // Skip ad network requests (let them handle their own)
+    if (url.hostname.includes('exoclick') || 
+        url.hostname.includes('adsterra') || 
+        url.hostname.includes('monetag') ||
+        url.hostname.includes('popcash') ||
+        url.hostname.includes('3nbf4.com')) {
+        return;
+    }
+    
+    // Determine caching strategy
+    if (isNetworkFirst(url)) {
+        event.respondWith(networkFirst(request));
+    } else if (isCacheFirst(url)) {
+        event.respondWith(cacheFirst(request));
+    } else {
+        event.respondWith(networkFirst(request));
+    }
+});
+
+// Network First Strategy (for API calls)
+async function networkFirst(request) {
+    try {
+        const networkResponse = await fetch(request);
+        
+        // Cache successful responses (except video streams)
+        if (networkResponse.ok && !request.url.includes('.m3u8') && !request.url.includes('.flv')) {
+            const cache = await caches.open(CACHE_NAME);
+            cache.put(request, networkResponse.clone());
+        }
+        
+        return networkResponse;
+    } catch (error) {
+        console.log('[SW-APP] Network failed, trying cache:', request.url.substring(0, 100));
+        
+        // Fallback to cache
+        const cachedResponse = await caches.match(request);
+        if (cachedResponse) {
+            return cachedResponse;
+        }
+        
+        // Return offline page for HTML requests
+        if (request.headers.get('accept')?.includes('text/html')) {
+            return new Response(`
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <title>Offline - TITIK SPORTS</title>
+                    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                    <style>
+                        body { font-family: Arial, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f5f5f5; }
+                        .offline { text-align: center; padding: 20px; }
+                        .offline h1 { color: #ff6600; margin-bottom: 10px; }
+                        .offline p { color: #666; }
+                        .retry-btn { margin-top: 20px; padding: 12px 24px; background: #ff6600; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 16px; }
+                    </style>
+                </head>
+                <body>
+                    <div class="offline">
+                        <h1>📡 You're Offline</h1>
+                        <p>Please check your internet connection</p>
+                        <button class="retry-btn" onclick="location.reload()">Retry</button>
+                    </div>
+                </body>
+                </html>
+            `, {
+                status: 200,
+                headers: { 'Content-Type': 'text/html' }
+            });
+        }
+        
+        // For other requests, return error
+        return new Response('Network error', {
+            status: 408,
+            headers: { 'Content-Type': 'text/plain' }
+        });
+    }
+}
+
+// Cache First Strategy (for static assets)
+async function cacheFirst(request) {
+    const cachedResponse = await caches.match(request);
+    
+    if (cachedResponse) {
+        // Update cache in background (stale-while-revalidate)
+        event.waitUntil(updateCache(request));
+        return cachedResponse;
+    }
+    
+    // Not in cache, fetch from network
+    try {
+        const networkResponse = await fetch(request);
+        
+        if (networkResponse.ok) {
+            const cache = await caches.open(CACHE_NAME);
+            cache.put(request, networkResponse.clone());
+        }
+        
+        return networkResponse;
+    } catch (error) {
+        console.error('[SW-APP] Cache and network failed:', request.url.substring(0, 100));
+        return new Response('Resource not available', {
+            status: 503,
+            headers: { 'Content-Type': 'text/plain' }
+        });
+    }
+}
+
+// Update cache in background
+async function updateCache(request) {
+    try {
+        const response = await fetch(request);
+        if (response.ok) {
+            const cache = await caches.open(CACHE_NAME);
+            await cache.put(request, response);
+        }
+    } catch (error) {
+        // Silent fail - not critical
+    }
+}
+
+// Check if URL should use Network First
+function isNetworkFirst(url) {
+    return NETWORK_FIRST_PATTERNS.some(pattern => pattern.test(url.href));
+}
+
+// Check if URL should use Cache First
+function isCacheFirst(url) {
+    return CACHE_FIRST_PATTERNS.some(pattern => pattern.test(url.href));
+}
+
+// Message handler (communicate with app)
+self.addEventListener('message', (event) => {
+    if (event.data.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
+    
+    if (event.data.type === 'CLEAR_CACHE') {
+        event.waitUntil(
+            caches.delete(CACHE_NAME).then(() => {
+                console.log('[SW-APP] Cache cleared');
+            })
+        );
+    }
+});
+
+console.log('[SW-APP] Service Worker v' + CACHE_VERSION + ' loaded');
