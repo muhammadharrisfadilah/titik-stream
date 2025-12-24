@@ -1,18 +1,20 @@
-// ===== VIEW MANAGER =====
+// ===== VIEW MANAGER - UPDATED FOR NEW DESIGN =====
 
 const IndexViewManager = {
     currentView: 'matches',
     activeFilter: 'all',
     
     elements: {
-        dateNav: null,
+        dateDisplay: null,
+        calendarPopup: null,
         filterTabs: null
     },
     
     // Initialize
     init() {
         this.elements = {
-            dateNav: document.getElementById('dateNav'),
+            dateDisplay: document.getElementById('dateDisplay'),
+            calendarPopup: document.getElementById('calendarPopup'),
             filterTabs: document.getElementById('filterTabs')
         };
         
@@ -29,12 +31,37 @@ const IndexViewManager = {
             });
         });
         
+        // Date display click
+        this.elements.dateDisplay?.addEventListener('click', () => {
+            IndexDateManager.toggleCalendar();
+        });
+        
         // Filter tabs
-        document.querySelectorAll('#filterTabs button').forEach(btn => {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', (e) => {
                 const filter = e.currentTarget.dataset.filter;
                 this.applyFilter(filter);
             });
+        });
+        
+        // Calendar navigation
+        document.getElementById('prevMonth')?.addEventListener('click', () => {
+            IndexDateManager.changeMonth(-1);
+        });
+        
+        document.getElementById('nextMonth')?.addEventListener('click', () => {
+            IndexDateManager.changeMonth(1);
+        });
+        
+        // Calendar date selection
+        document.getElementById('calendarGrid')?.addEventListener('click', (e) => {
+            const dateEl = e.target.closest('.calendar-day.date');
+            if (dateEl && !dateEl.classList.contains('other-month')) {
+                const dateStr = dateEl.dataset.date;
+                if (dateStr) {
+                    IndexDateManager.selectDate(dateStr);
+                }
+            }
         });
     },
     
@@ -51,15 +78,6 @@ const IndexViewManager = {
             event.currentTarget.classList.add('active');
         } else {
             document.querySelector(`.nav-item[data-view="${view}"]`)?.classList.add('active');
-        }
-        
-        // Show/hide date nav and filters
-        if (view === 'matches') {
-            this.elements.dateNav?.classList.add('show');
-            this.elements.filterTabs?.classList.add('show');
-        } else {
-            this.elements.dateNav?.classList.remove('show');
-            this.elements.filterTabs?.classList.remove('show');
         }
         
         // Load data for view
@@ -79,7 +97,7 @@ const IndexViewManager = {
         this.activeFilter = filter;
         
         // Update filter buttons
-        document.querySelectorAll('#filterTabs button').forEach(btn => {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.classList.remove('active');
             if (btn.dataset.filter === filter) {
                 btn.classList.add('active');
@@ -94,12 +112,14 @@ const IndexViewManager = {
     
     // Toggle league section
     toggleLeague(leagueId) {
-        const matches = document.getElementById(`league-${leagueId}`);
-        const header = document.getElementById(`league-header-${leagueId}`);
+        const matches = document.getElementById(`matches-${leagueId}`);
+        const header = document.getElementById(`league-${leagueId}`)?.querySelector('.league-header');
+        const arrow = header?.querySelector('.count-arrow');
         
-        if (matches && header) {
+        if (matches && header && arrow) {
             matches.classList.toggle('expanded');
             header.classList.toggle('expanded');
+            arrow.textContent = arrow.textContent === '▼' ? '▲' : '▼';
         }
     },
     

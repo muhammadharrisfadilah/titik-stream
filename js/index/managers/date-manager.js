@@ -1,25 +1,29 @@
-// ===== DATE MANAGER =====
+// ===== DATE MANAGER - DENGAN TOMBOL DALAM CARD =====
 
 const IndexDateManager = {
     currentDate: new Date(),
     calendarDate: new Date(),
     
     elements: {
-        currentDateText: null,
+        dateDisplay: null,
+        dateText: null,
         calendarPopup: null,
         calendarMonth: null,
         calendarGrid: null,
-        todayButton: null
+        prevDayBtn: null,
+        nextDayBtn: null
     },
     
     // Initialize elements
     init() {
         this.elements = {
-            currentDateText: document.getElementById('currentDateText'),
+            dateDisplay: document.getElementById('dateDisplay'),
+            dateText: document.getElementById('currentDateText'),
             calendarPopup: document.getElementById('calendarPopup'),
             calendarMonth: document.getElementById('calendarMonth'),
             calendarGrid: document.getElementById('calendarGrid'),
-            todayButton: document.getElementById('todayButton')
+            prevDayBtn: document.getElementById('prevDay'),
+            nextDayBtn: document.getElementById('nextDay')
         };
         
         this.updateDateText();
@@ -28,32 +32,38 @@ const IndexDateManager = {
     
     // Setup event listeners
     setupEventListeners() {
-        // Previous day
-        document.getElementById('prevDay')?.addEventListener('click', () => {
-            this.changeDate(-1);
-        });
-        
-        // Next day
-        document.getElementById('nextDay')?.addEventListener('click', () => {
-            this.changeDate(1);
-        });
-        
-        // Toggle calendar
-        this.elements.todayButton?.addEventListener('click', () => {
+        // Date display click
+        this.elements.dateDisplay?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
             this.toggleCalendar();
         });
         
+        // Previous day button
+        this.elements.prevDayBtn?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
+            this.changeDate(-1);
+        });
+        
+        // Next day button
+        this.elements.nextDayBtn?.addEventListener('click', (e) => {
+            e.stopPropagation(); // Prevent event bubbling
+            this.changeDate(1);
+        });
+        
         // Calendar month navigation
-        document.getElementById('prevMonth')?.addEventListener('click', () => {
+        document.getElementById('prevMonth')?.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.changeMonth(-1);
         });
         
-        document.getElementById('nextMonth')?.addEventListener('click', () => {
+        document.getElementById('nextMonth')?.addEventListener('click', (e) => {
+            e.stopPropagation();
             this.changeMonth(1);
         });
         
         // Calendar date selection
-        this.elements.calendarGrid?.addEventListener('click', (e) => {
+        document.getElementById('calendarGrid')?.addEventListener('click', (e) => {
+            e.stopPropagation();
             const dateEl = e.target.closest('.calendar-day.date');
             if (dateEl && !dateEl.classList.contains('other-month')) {
                 const dateStr = dateEl.dataset.date;
@@ -65,35 +75,90 @@ const IndexDateManager = {
         
         // Close calendar when clicking outside
         document.addEventListener('click', (e) => {
-            const dateNav = document.querySelector('.date-nav');
-            if (!dateNav?.contains(e.target) && this.elements.calendarPopup?.classList.contains('show')) {
+            const dateCard = document.querySelector('.date-card');
+            const calendarPopup = document.getElementById('calendarPopup');
+            
+            if (calendarPopup?.classList.contains('show') && 
+                !dateCard?.contains(e.target)) {
                 this.toggleCalendar();
             }
         });
+        
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                this.changeDate(-1);
+            }
+            if (e.key === 'ArrowRight') {
+                e.preventDefault();
+                this.changeDate(1);
+            }
+            if (e.key === 'Escape') {
+                const popup = document.getElementById('calendarPopup');
+                if (popup?.classList.contains('show')) {
+                    this.toggleCalendar();
+                }
+            }
+        });
+        
+        // Swipe gestures
+        this.setupSwipeGestures();
+    },
+    
+    // Setup swipe gestures
+    setupSwipeGestures() {
+        let touchStartX = 0;
+        let touchEndX = 0;
+        const minSwipeDistance = 50;
+        
+        const dateCard = document.querySelector('.date-card');
+        
+        if (!dateCard) return;
+        
+        dateCard.addEventListener('touchstart', (e) => {
+            touchStartX = e.changedTouches[0].clientX;
+        }, { passive: true });
+        
+        dateCard.addEventListener('touchend', (e) => {
+            touchEndX = e.changedTouches[0].clientX;
+            const swipeDistance = touchEndX - touchStartX;
+            
+            if (Math.abs(swipeDistance) > minSwipeDistance) {
+                if (swipeDistance > 0) {
+                    // Swipe right - previous day
+                    this.changeDate(-1);
+                } else {
+                    // Swipe left - next day
+                    this.changeDate(1);
+                }
+            }
+        }, { passive: true });
     },
     
     // Update date text
     updateDateText() {
-        if (this.elements.currentDateText) {
-            this.elements.currentDateText.textContent = IndexHelpers.formatDateText(this.currentDate);
+        if (this.elements.dateText) {
+            const formattedDate = IndexHelpers.formatDateText(this.currentDate);
+            this.elements.dateText.textContent = formattedDate;
         }
     },
     
     // Toggle calendar visibility
     toggleCalendar() {
         const popup = this.elements.calendarPopup;
-        const todayBtn = this.elements.todayButton;
+        const dateDisplay = this.elements.dateDisplay;
         
-        if (!popup || !todayBtn) return;
+        if (!popup || !dateDisplay) return;
         
         if (popup.classList.contains('show')) {
             popup.classList.remove('show');
-            todayBtn.classList.remove('expanded');
+            dateDisplay.classList.remove('active');
         } else {
             this.calendarDate = new Date(this.currentDate);
             this.renderCalendar();
             popup.classList.add('show');
-            todayBtn.classList.add('expanded');
+            dateDisplay.classList.add('active');
         }
     },
     
@@ -107,7 +172,9 @@ const IndexDateManager = {
             'July', 'August', 'September', 'October', 'November', 'December'
         ];
         
-        this.elements.calendarMonth.textContent = `${monthNames[month]} ${year}`;
+        if (this.elements.calendarMonth) {
+            this.elements.calendarMonth.textContent = `${monthNames[month]} ${year}`;
+        }
         
         const firstDay = new Date(year, month, 1);
         const lastDay = new Date(year, month + 1, 0);
@@ -138,17 +205,22 @@ const IndexDateManager = {
             const date = new Date(year, month, i);
             let className = 'calendar-day date';
             
+            // Check if today
             if (date.getFullYear() === today.getFullYear() &&
                 date.getMonth() === today.getMonth() &&
                 date.getDate() === today.getDate()) {
                 className += ' today';
-            } else if (date.getFullYear() === selectedDate.getFullYear() &&
-                       date.getMonth() === selectedDate.getMonth() &&
-                       date.getDate() === selectedDate.getDate()) {
+            }
+            
+            // Check if selected
+            if (date.getFullYear() === selectedDate.getFullYear() &&
+                date.getMonth() === selectedDate.getMonth() &&
+                date.getDate() === selectedDate.getDate()) {
                 className += ' selected';
             }
             
-            html += `<div class="${className}" data-date="${year}-${month + 1}-${i}">${i}</div>`;
+            const dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(i).padStart(2, '0')}`;
+            html += `<div class="${className}" data-date="${dateStr}">${i}</div>`;
         }
         
         // Next month days
@@ -160,7 +232,9 @@ const IndexDateManager = {
             html += `<div class="calendar-day date other-month">${i}</div>`;
         }
         
-        this.elements.calendarGrid.innerHTML = html;
+        if (this.elements.calendarGrid) {
+            this.elements.calendarGrid.innerHTML = html;
+        }
     },
     
     // Change month

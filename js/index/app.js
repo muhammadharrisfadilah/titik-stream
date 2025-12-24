@@ -1,4 +1,4 @@
-// ===== MAIN INDEX APPLICATION =====
+// ===== MAIN INDEX APPLICATION - DENGAN PERBAIKAN =====
 
 const IndexApp = {
     state: {
@@ -14,11 +14,12 @@ const IndexApp = {
     
     // Initialize application
     async init() {
-        IndexConfig.log.info('🚀 TITIK SPORTS v2.0 - Initializing...');
+        IndexConfig.log.info('🚀 TITIK SPORTS - Initializing...');
         
         // Initialize managers
         IndexDateManager.init();
         IndexViewManager.init();
+        IndexSearchManager.init();
         
         // Setup event listeners
         this.setupEventListeners();
@@ -56,35 +57,14 @@ const IndexApp = {
             IndexHelpers.showToast('You are offline', 'warning');
         });
         
-        // Keyboard shortcuts
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowLeft') {
-                IndexDateManager.changeDate(-1);
-            }
-            if (e.key === 'ArrowRight') {
-                IndexDateManager.changeDate(1);
-            }
-            if (e.key === 'Escape') {
-                const popup = document.getElementById('calendarPopup');
-                if (popup?.classList.contains('show')) {
-                    IndexDateManager.toggleCalendar();
-                }
-            }
-        });
-        
-        // Match click handler (with ads)
+        // Match click handler
         document.addEventListener('click', (e) => {
-            const matchItem = e.target.closest('.match-item');
-            if (matchItem) {
+            const matchCard = e.target.closest('.match-card');
+            if (matchCard) {
                 e.preventDefault();
-                const matchId = matchItem.dataset.matchId;
-                if (matchId && window.IndexAdsManager) {
-                    // Use ads manager click interceptor
-                    window.IndexAdsManager.checkAndHandleClick(() => {
-                        this.navigateToMatchDetails(matchId);
-                    });
-                } else if (matchId) {
-                    this.navigateToMatchDetails(matchId);
+                const matchId = matchCard.dataset.matchId;
+                if (matchId) {
+                    this.handleMatchClick(matchId);
                 }
             }
         });
@@ -101,6 +81,17 @@ const IndexApp = {
         }
     },
     
+    // Handle match click with ads
+    handleMatchClick(matchId) {
+        if (window.IndexAdsManager) {
+            window.IndexAdsManager.handleSmartlinkClick(() => {
+                this.navigateToMatchDetails(matchId);
+            });
+        } else {
+            this.navigateToMatchDetails(matchId);
+        }
+    },
+    
     // Setup pull-to-refresh
     setupPullToRefresh() {
         let pullStartY = 0;
@@ -108,6 +99,9 @@ const IndexApp = {
         let pullDistance = 0;
         
         const refreshControl = document.getElementById('refreshControl');
+        
+        // Only setup if refresh control exists
+        if (!refreshControl) return;
         
         document.addEventListener('touchstart', (e) => {
             if (IndexViewManager.getCurrentView() !== 'matches' || this.state.isRefreshing) return;
@@ -158,10 +152,10 @@ const IndexApp = {
             const dateStr = IndexHelpers.formatDate(IndexDateManager.getCurrentDate());
             const cacheKey = `matches_${dateStr}`;
             
-            IndexCacheService.clear(cacheKey);
+            await IndexCacheService.delete(cacheKey);
             
             const data = await IndexAPIService.fetchMatches(IndexDateManager.getCurrentDate());
-            IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
+            await IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
             
             this.state.matchesData = data;
             IndexMatchesRenderer.render(data);
@@ -176,7 +170,7 @@ const IndexApp = {
             // Show cached data
             const dateStr = IndexHelpers.formatDate(IndexDateManager.getCurrentDate());
             const cacheKey = `matches_${dateStr}`;
-            const cached = IndexCacheService.get(cacheKey);
+            const cached = await IndexCacheService.get(cacheKey);
             
             if (cached) {
                 this.state.matchesData = cached;
@@ -184,7 +178,9 @@ const IndexApp = {
             }
         } finally {
             setTimeout(() => {
-                refreshControl?.classList.remove('show');
+                if (refreshControl) {
+                    refreshControl.classList.remove('show');
+                }
                 this.state.isRefreshing = false;
             }, 500);
         }
@@ -197,7 +193,7 @@ const IndexApp = {
         
         // Check cache first
         if (!forceRefresh) {
-            const cachedData = IndexCacheService.get(cacheKey);
+            const cachedData = await IndexCacheService.get(cacheKey);
             if (cachedData) {
                 this.state.matchesData = cachedData;
                 IndexMatchesRenderer.render(cachedData);
@@ -214,7 +210,7 @@ const IndexApp = {
         try {
             const data = await IndexAPIService.fetchMatches(IndexDateManager.getCurrentDate());
             
-            IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
+            await IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
             
             this.state.matchesData = data;
             IndexMatchesRenderer.render(data);
@@ -225,7 +221,7 @@ const IndexApp = {
             IndexConfig.log.error('❌ Error loading matches:', error);
             
             // Check cache again
-            const cached = IndexCacheService.get(cacheKey);
+            const cached = await IndexCacheService.get(cacheKey);
             if (cached) {
                 this.state.matchesData = cached;
                 IndexMatchesRenderer.render(cached);
@@ -251,7 +247,7 @@ const IndexApp = {
             
             const data = await IndexAPIService.fetchMatches(IndexDateManager.getCurrentDate());
             
-            IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
+            await IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
             
             if (IndexViewManager.getCurrentView() === 'matches') {
                 this.state.matchesData = data;
@@ -271,7 +267,7 @@ const IndexApp = {
         const cacheKey = 'all_leagues';
         
         if (!forceRefresh) {
-            const cachedData = IndexCacheService.get(cacheKey);
+            const cachedData = await IndexCacheService.get(cacheKey);
             if (cachedData) {
                 this.state.leaguesData = cachedData;
                 IndexLeaguesRenderer.render(cachedData);
@@ -283,14 +279,14 @@ const IndexApp = {
         
         try {
             const data = await IndexAPIService.fetchLeagues();
-            IndexCacheService.set(cacheKey, data, IndexConfig.cache.LEAGUES_TTL);
+            await IndexCacheService.set(cacheKey, data, IndexConfig.cache.LEAGUES_TTL);
             
             this.state.leaguesData = data;
             IndexLeaguesRenderer.render(data);
         } catch (error) {
             IndexConfig.log.error('❌ Error loading leagues:', error);
             
-            const cached = IndexCacheService.get(cacheKey);
+            const cached = await IndexCacheService.get(cacheKey);
             if (cached) {
                 this.state.leaguesData = cached;
                 IndexLeaguesRenderer.render(cached);
@@ -307,7 +303,7 @@ const IndexApp = {
         const cacheKey = 'standings_47';
         
         if (!forceRefresh) {
-            const cachedData = IndexCacheService.get(cacheKey);
+            const cachedData = await IndexCacheService.get(cacheKey);
             if (cachedData) {
                 this.state.standingsData = cachedData;
                 IndexStandingsRenderer.render(cachedData);
@@ -319,14 +315,14 @@ const IndexApp = {
         
         try {
             const data = await IndexAPIService.fetchStandings();
-            IndexCacheService.set(cacheKey, data, IndexConfig.cache.STANDINGS_TTL);
+            await IndexCacheService.set(cacheKey, data, IndexConfig.cache.STANDINGS_TTL);
             
             this.state.standingsData = data;
             IndexStandingsRenderer.render(data);
         } catch (error) {
             IndexConfig.log.error('❌ Error loading standings:', error);
             
-            const cached = IndexCacheService.get(cacheKey);
+            const cached = await IndexCacheService.get(cacheKey);
             if (cached) {
                 this.state.standingsData = cached;
                 IndexStandingsRenderer.render(cached);
@@ -354,7 +350,7 @@ const IndexApp = {
             try {
                 if (type === 'matches') {
                     const data = await IndexAPIService.fetchMatches(IndexDateManager.getCurrentDate());
-                    IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
+                    await IndexCacheService.set(cacheKey, data, IndexConfig.cache.MATCHES_TTL);
                     
                     if (IndexViewManager.getCurrentView() === 'matches') {
                         this.state.matchesData = data;

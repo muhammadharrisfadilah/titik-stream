@@ -16,7 +16,6 @@ const IndexAdsManager = {
         clickCount: 0,
         lastClickTime: 0,
         clickResetTimer: null,
-        nativeAdsInserted: 0
     },
     
     init() {
@@ -78,37 +77,6 @@ const IndexAdsManager = {
         }
     },
     
-    // ===== FIX: NATIVE ADS INSERTION =====
-    insertNativeAds() {
-        const leagueSections = document.querySelectorAll('.league-section');
-        
-        if (leagueSections.length === 0) {
-            console.log('ℹ️ No league sections found for native ads');
-            return;
-        }
-        
-        console.log(`📰 Inserting native ads every 4 sections (${leagueSections.length} sections found)`);
-        
-        leagueSections.forEach((section, index) => {
-            // Insert ad every 4 sections
-            if ((index + 1) % 4 === 0) {
-                const adContainer = document.createElement('div');
-                adContainer.className = 'native-ad';
-                adContainer.innerHTML = `
-                    <div class="ad-label">Advertisement</div>
-                    <div id="native-ad-${this.state.nativeAdsInserted}" style="min-height: 200px; background: #fafafa; border-radius: 8px; display: flex; align-items: center; justify-content: center; color: #999;">
-                        Native Ad Placeholder ${this.state.nativeAdsInserted + 1}
-                    </div>
-                `;
-                
-                // Insert after current section
-                section.parentNode.insertBefore(adContainer, section.nextSibling);
-                this.state.nativeAdsInserted++;
-            }
-        });
-        
-        console.log(`✅ Inserted ${this.state.nativeAdsInserted} native ads`);
-    },
     
     // ===== SMARTLINK CLICK INTERCEPTOR =====
     setupSmartlinkInterceptor() {
