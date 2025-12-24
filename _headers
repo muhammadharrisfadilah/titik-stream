@@ -1,0 +1,31 @@
+# Cloudflare Pages Headers
+# SAVE AS: _headers (no extension) in ROOT folder
+
+/sw-app.js
+  Content-Type: application/javascript
+  Cache-Control: max-age=0
+
+/sw.js
+  Content-Type: application/javascript
+  Cache-Control: max-age=0
+
+/sw-register.js
+  Content-Type: application/javascript
+
+/js/*
+  Content-Type: application/javascript
+
+*.js
+  Content-Type: application/javascript
+
+/css/*
+  Content-Type: text/css
+
+*.css
+  Content-Type: text/css
+
+/manifest.json
+  Content-Type: application/manifest+json
+
+/*
+  X-Content-Type-Options: nosniff

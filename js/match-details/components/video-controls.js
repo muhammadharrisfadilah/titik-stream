@@ -1,30 +1,28 @@
 // ===== VIDEO CONTROLS COMPONENT =====
-
 const VideoControls = {
-    // Toggle play/pause
     togglePlayPause() {
         const videoElement = document.getElementById('videoElement');
         if (!videoElement) return;
         
+        const playPauseBtn = document.getElementById('playPauseBtn');
         if (videoElement.paused) {
-            videoElement.play();
-            document.getElementById('playPauseBtn').textContent = '⏸️';
+            videoElement.play().catch(e => console.log('Play prevented:', e));
+            if (playPauseBtn) playPauseBtn.textContent = '⏸️';
         } else {
             videoElement.pause();
-            document.getElementById('playPauseBtn').textContent = '▶️';
+            if (playPauseBtn) playPauseBtn.textContent = '▶️';
         }
     },
     
-    // Toggle mute
     toggleMute() {
         const videoElement = document.getElementById('videoElement');
         if (!videoElement) return;
         
+        const muteBtn = document.getElementById('muteBtn');
         videoElement.muted = !videoElement.muted;
-        document.getElementById('muteBtn').textContent = videoElement.muted ? '🔇' : '🔊';
+        if (muteBtn) muteBtn.textContent = videoElement.muted ? '🔇' : '🔊';
     },
     
-    // Update time display
     updateTimeDisplay() {
         const videoElement = document.getElementById('videoElement');
         const timeDisplay = document.getElementById('timeDisplay');
@@ -35,68 +33,51 @@ const VideoControls = {
         timeDisplay.textContent = `${currentTime} / ${duration}`;
     },
     
-    // Reload stream
-    async reloadStream() {
-        const videoElement = document.getElementById('videoElement');
-        if (videoElement) {
-            videoElement.src = videoElement.src + '?t=' + Date.now();
-            videoElement.load();
-            videoElement.play().catch(e => console.log('Autoplay prevented:', e));
+    reloadStream() {
+        if (window.VideoPlayer && VideoPlayer.reloadCurrentStream) {
+            VideoPlayer.reloadCurrentStream();
         }
     },
     
-    // Toggle fullscreen
     toggleFullscreen() {
         const videoElement = document.getElementById('videoElement');
-        if (!videoElement) return;
+        const container = document.querySelector('.player-wrapper');
+        const target = container || videoElement;
+        
+        if (!target) return;
         
         if (!document.fullscreenElement) {
-            if (videoElement.requestFullscreen) {
-                videoElement.requestFullscreen();
-            } else if (videoElement.webkitRequestFullscreen) {
-                videoElement.webkitRequestFullscreen();
-            } else if (videoElement.mozRequestFullScreen) {
-                videoElement.mozRequestFullScreen();
-            }
+            if (target.requestFullscreen) target.requestFullscreen();
+            else if (target.webkitRequestFullscreen) target.webkitRequestFullscreen();
+            else if (target.mozRequestFullScreen) target.mozRequestFullScreen();
         } else {
-            if (document.exitFullscreen) {
-                document.exitFullscreen();
-            } else if (document.webkitExitFullscreen) {
-                document.webkitExitFullscreen();
-            } else if (document.mozCancelFullScreen) {
-                document.mozCancelFullScreen();
-            }
+            if (document.exitFullscreen) document.exitFullscreen();
+            else if (document.webkitExitFullscreen) document.webkitExitFullscreen();
+            else if (document.mozCancelFullScreen) document.mozCancelFullScreen();
         }
     },
     
-    // Set volume
     setVolume(value) {
         const videoElement = document.getElementById('videoElement');
         if (!videoElement) return;
-        
-        videoElement.volume = value / 100;
+        videoElement.volume = Math.max(0, Math.min(1, value / 100));
     },
     
-    // Seek to time
     seekTo(seconds) {
         const videoElement = document.getElementById('videoElement');
         if (!videoElement) return;
-        
-        videoElement.currentTime = seconds;
+        videoElement.currentTime = Math.max(0, Math.min(videoElement.duration, seconds));
     },
     
-    // Get current time
     getCurrentTime() {
         const videoElement = document.getElementById('videoElement');
         return videoElement ? videoElement.currentTime : 0;
     },
     
-    // Get duration
     getDuration() {
         const videoElement = document.getElementById('videoElement');
         return videoElement ? videoElement.duration : 0;
     }
 };
 
-// Make controls globally available
 window.VideoControls = VideoControls;

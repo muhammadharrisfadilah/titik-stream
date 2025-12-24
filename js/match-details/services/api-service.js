@@ -1,14 +1,10 @@
 // ===== API SERVICE =====
-
 const APIService = {
-    // Fetch match data from FotMob API
     async fetchMatchData(matchId) {
         console.log('📡 [FETCH] Starting data fetch for matchId:', matchId);
-        
         try {
             const url = `${AppConfig.api.BASE_URL}/data/matchDetails?matchId=${matchId}`;
             console.log('🌐 [FETCH] Request URL:', url);
-            
             const response = await fetch(url, {
                 headers: {
                     'Accept': 'application/json',
@@ -16,35 +12,20 @@ const APIService = {
                 }
             });
             
-            console.log('📡 [FETCH] Response status:', response.status, response.statusText);
-            
             if (!response.ok) {
-                console.error('❌ [FETCH] HTTP Error:', response.status);
                 throw new Error(`HTTP ${response.status}`);
             }
             
-            const data = await response.json();
-            console.log('✅ [FETCH] Raw JSON data received');
-            console.log('📊 [FETCH] Data structure keys:', Object.keys(data));
-            
-            return data;
-            
+            return await response.json();
         } catch (error) {
             console.error('❌ [FETCH] Fatal error:', error);
             throw error;
         }
     },
     
-    // Extract header data
     extractHeader(data) {
-        console.log('🔍 [HEADER] Extracting header data...');
+        if (data.header) return data.header;
         
-        if (data.header) {
-            console.log('✅ [HEADER] Using data.header');
-            return data.header;
-        }
-        
-        console.log('⚠️ [HEADER] No data.header found, building from general');
         return {
             teams: [
                 { 
@@ -66,16 +47,9 @@ const APIService = {
         };
     },
     
-    // Extract general info
     extractGeneralInfo(data) {
-        console.log('🔍 [GENERAL] Extracting general info...');
+        if (data.general) return data.general;
         
-        if (data.general) {
-            console.log('✅ [GENERAL] Using data.general');
-            return data.general;
-        }
-        
-        console.log('⚠️ [GENERAL] Building general info from available data');
         return {
             leagueName: data.league?.name || 'Unknown League',
             matchTimeUTCDate: data.matchTimeUTC || new Date().toISOString(),
@@ -85,41 +59,21 @@ const APIService = {
         };
     },
     
-    // Extract match facts
     extractMatchFacts(data) {
-        console.log('🔍 [FACTS] Extracting match facts...');
-        
-        if (data.content?.matchFacts) {
-            console.log('✅ [FACTS] Using data.content.matchFacts');
-            return data.content.matchFacts;
-        }
-        if (data.matchFacts) {
-            console.log('✅ [FACTS] Using data.matchFacts');
-            return data.matchFacts;
-        }
-        
-        console.log('⚠️ [FACTS] No match facts found');
+        if (data.content?.matchFacts) return data.content.matchFacts;
+        if (data.matchFacts) return data.matchFacts;
         return { stats: {}, general: {} };
     },
     
-    // Extract lineups
     extractLineups(data) {
-        if (data.content?.lineup) {
-            return this.formatLineupData(data.content.lineup);
-        }
-        if (data.lineup) {
-            return this.formatLineupData(data.lineup);
-        }
-        if (data.teams) {
-            return this.formatLineupData(data.teams);
-        }
+        if (data.content?.lineup) return this.formatLineupData(data.content.lineup);
+        if (data.lineup) return this.formatLineupData(data.lineup);
+        if (data.teams) return this.formatLineupData(data.teams);
         return null;
     },
     
-    // Format lineup data
     formatLineupData(lineupData) {
         const teams = [];
-        
         const processTeam = (teamData, isHome) => {
             if (!teamData) return;
             
@@ -147,7 +101,6 @@ const APIService = {
                 starting = teamData.lineup;
             }
 
-            // Standardize player names
             starting = starting.map(p => ({
                 ...p,
                 name: p.name?.fullName || p.name || `${p.firstName || ''} ${p.lastName || ''}`.trim()
@@ -160,10 +113,7 @@ const APIService = {
             return {
                 name: teamData.name || (isHome ? 'Home Team' : 'Away Team'),
                 formation: teamData.formation || teamData.formationUsed || 'N/A',
-                players: {
-                    starting: starting,
-                    substitutes: substitutes
-                },
+                players: { starting, substitutes },
                 manager: teamData.manager
             };
         };
@@ -177,27 +127,13 @@ const APIService = {
         return { teams };
     },
     
-    // Extract stats
     extractStats(data) {
-        console.log('🔍 [STATS] Extracting stats...');
-        
-        if (data.content?.stats?.stats) {
-            console.log('✅ [STATS] Using data.content.stats.stats');
-            return data.content.stats.stats;
-        }
-        if (data.stats) {
-            console.log('✅ [STATS] Using data.stats');
-            return data.stats;
-        }
-        
-        console.log('⚠️ [STATS] No stats found');
+        if (data.content?.stats?.stats) return data.content.stats.stats;
+        if (data.stats) return data.stats;
         return { home: {}, away: {} };
     },
     
-    // Extract all data
     async extractAllData(rawData) {
-        console.log('🔍 [EXTRACT] Starting data extraction...');
-        
         return {
             details: rawData,
             header: this.extractHeader(rawData),
@@ -216,5 +152,4 @@ const APIService = {
     }
 };
 
-// Make service globally available
 window.APIService = APIService;

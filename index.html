@@ -4,284 +4,320 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>TITIK SPORTS - Live Streaming Bola & Jadwal Pertandingan</title>
-    <meta name="description" content="Nonton live streaming sepak bola gratis! Skor langsung, jadwal pertandingan, dan klasemen liga terlengkap." />
-    
-    <!-- ===== SEO Meta Tags ===== -->
-    <meta name="keywords" content="live streaming bola, jadwal bola hari ini, skor bola live, nonton bola gratis, liga champions, premier league, liga 1 indonesia">
-    <meta name="author" content="TITIK SPORTS">
-    <meta name="robots" content="index, follow">
-    <link rel="canonical" href="https://titiksports.pages.dev/">
+    <meta
+      name="description"
+      content="Nonton live streaming sepak bola gratis! Skor langsung, jadwal pertandingan, dan klasemen liga terlengkap."
+    />
 
+    <!-- ===== SEO Meta Tags ===== -->
+    <meta
+      name="keywords"
+      content="live streaming bola, jadwal bola hari ini, skor bola live, nonton bola gratis, liga champions, premier league, liga 1 indonesia"
+    />
+    <meta name="author" content="TITIK SPORTS" />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href="https://titiksports.pages.dev/" />
+    <meta
+      name="google-site-verification"
+      content="O3ftuhwr5_90JwrYvktTev_csNjwa3aEGXLVmoZCV-Y"
+    />
     <!-- ===== Open Graph ===== -->
-    <meta property="og:type" content="website">
-    <meta property="og:url" content="https://titiksports.pages.dev/">
-    <meta property="og:title" content="TITIK SPORTS - Live Streaming Bola & Jadwal Pertandingan">
-    <meta property="og:description" content="Nonton live streaming sepak bola gratis! Skor langsung, jadwal pertandingan, dan klasemen liga terlengkap.">
-    <meta property="og:image" content="https://titiksports.pages.dev/logo.png">
-    <meta property="og:site_name" content="TITIK SPORTS">
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://titiksports.pages.dev/" />
+    <meta
+      property="og:title"
+      content="TITIK SPORTS - Live Streaming Bola & Jadwal Pertandingan"
+    />
+    <meta
+      property="og:description"
+      content="Nonton live streaming sepak bola gratis! Skor langsung, jadwal pertandingan, dan klasemen liga terlengkap."
+    />
+    <meta
+      property="og:image"
+      content="https://titiksports.pages.dev/logo.png"
+    />
+    <meta property="og:site_name" content="TITIK SPORTS" />
 
     <!-- ===== Twitter Card ===== -->
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:url" content="https://titiksports.pages.dev/">
-    <meta name="twitter:title" content="TITIK SPORTS - Live Streaming Bola">
-    <meta name="twitter:description" content="Nonton live streaming sepak bola gratis!">
-    <meta name="twitter:image" content="https://titiksports.pages.dev/logo.png">
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:url" content="https://titiksports.pages.dev/" />
+    <meta name="twitter:title" content="TITIK SPORTS - Live Streaming Bola" />
+    <meta
+      name="twitter:description"
+      content="Nonton live streaming sepak bola gratis!"
+    />
+    <meta
+      name="twitter:image"
+      content="https://titiksports.pages.dev/logo.png"
+    />
 
     <!-- ===== PWA Tags ===== -->
-    <meta name="theme-color" content="#ff6600">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="TITIK SPORTS">
-    <link rel="apple-touch-icon" href="/logo.png">
-    <link rel="manifest" href="/manifest.json">
-    
+    <meta name="theme-color" content="#ff6600" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta
+      name="apple-mobile-web-app-status-bar-style"
+      content="black-translucent"
+    />
+    <meta name="apple-mobile-web-app-title" content="TITIK SPORTS" />
+    <link rel="apple-touch-icon" href="/logo.png" />
+    <link rel="manifest" href="/manifest.json" />
+
     <!-- Original CSS -->
     <link rel="stylesheet" href="css/style.css" />
     <link rel="stylesheet" href="css/ads-styles.css" />
-    
+
     <!-- ===== ENHANCED AD STYLES FOR INDEX PAGE ===== -->
     <style>
-        /* ===== SOCIAL BAR (Mobile Sticky Top) ===== */
-        #adsterra-social-bar {
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            z-index: 9999;
-            height: 50px;
-            background: white;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      /* ===== SOCIAL BAR (Mobile Sticky Top) ===== */
+      #adsterra-social-bar {
+        position: fixed;
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 9999;
+        height: 50px;
+        background: white;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+      }
+
+      body.has-social-bar {
+        padding-top: 50px;
+      }
+
+      body.has-social-bar .header {
+        top: 50px;
+      }
+
+      /* ===== LEADERBOARD (Desktop Top) ===== */
+      .exoclick-leaderboard {
+        background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+        border-bottom: 1px solid #e0e0e0;
+      }
+
+      /* ===== NATIVE ADS (In-Feed) ===== */
+      .native-ad {
+        margin: 20px 8px;
+        background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
+        border-radius: 12px;
+        padding: 16px;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        border: 1px solid #f0f0f0;
+        animation: fadeInAd 0.5s ease;
+      }
+
+      .native-ad .ad-label {
+        font-size: 9px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 12px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      /* ===== STICKY BANNER (Bottom) ===== */
+      #sticky-banner {
+        position: fixed;
+        bottom: 60px;
+        left: 0;
+        right: 0;
+        z-index: 9998;
+        background: white;
+        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.1);
+        padding: 8px;
+        text-align: center;
+      }
+
+      .sticky-close-btn {
+        position: absolute;
+        top: 4px;
+        right: 4px;
+        background: rgba(0, 0, 0, 0.5);
+        color: white;
+        border: none;
+        border-radius: 50%;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
+        font-size: 12px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        transition: all 0.2s;
+      }
+
+      .sticky-close-btn:hover {
+        background: rgba(0, 0, 0, 0.8);
+      }
+
+      /* ===== BANNER CONTAINERS ===== */
+      .ad-banner-container {
+        background: #f8f8f8;
+        padding: 12px;
+        margin: 16px 8px;
+        border-radius: 8px;
+        border: 1px solid #e0e0e0;
+        animation: fadeInAd 0.5s ease;
+        text-align: center;
+      }
+
+      .ad-label {
+        font-size: 10px;
+        color: #999;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+        margin-bottom: 8px;
+        text-align: center;
+        font-weight: 600;
+      }
+
+      /* ===== SMARTLINK TOAST ===== */
+      .smartlink-toast {
+        position: fixed;
+        bottom: 90px;
+        left: 50%;
+        transform: translateX(-50%);
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 14px 24px;
+        border-radius: 25px;
+        font-size: 14px;
+        font-weight: 600;
+        z-index: 10001;
+        box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
+        animation: bounceIn 0.5s ease;
+        backdrop-filter: blur(10px);
+      }
+
+      @keyframes bounceIn {
+        0% {
+          opacity: 0;
+          transform: translateX(-50%) scale(0.3);
         }
-        
-        body.has-social-bar {
-            padding-top: 50px;
+        50% {
+          opacity: 1;
+          transform: translateX(-50%) scale(1.05);
         }
-        
-        body.has-social-bar .header {
-            top: 50px;
+        70% {
+          transform: translateX(-50%) scale(0.9);
         }
-        
-        /* ===== LEADERBOARD (Desktop Top) ===== */
+        100% {
+          transform: translateX(-50%) scale(1);
+        }
+      }
+
+      @keyframes fadeInAd {
+        from {
+          opacity: 0;
+          transform: translateY(-10px);
+        }
+        to {
+          opacity: 1;
+          transform: translateY(0);
+        }
+      }
+
+      /* ===== RESPONSIVE ADJUSTMENTS ===== */
+      @media (max-width: 768px) {
         .exoclick-leaderboard {
-            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
-            border-bottom: 1px solid #e0e0e0;
+          display: none;
         }
-        
-        /* ===== NATIVE ADS (In-Feed) ===== */
+
         .native-ad {
-            margin: 20px 8px;
-            background: linear-gradient(135deg, #fafafa 0%, #ffffff 100%);
-            border-radius: 12px;
-            padding: 16px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            border: 1px solid #f0f0f0;
-            animation: fadeInAd 0.5s ease;
+          margin: 16px 8px;
+          padding: 12px;
         }
-        
-        .native-ad .ad-label {
-            font-size: 9px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 12px;
-            text-align: center;
-            font-weight: 600;
-        }
-        
-        /* ===== STICKY BANNER (Bottom) ===== */
-        #sticky-banner {
-            position: fixed;
-            bottom: 60px;
-            left: 0;
-            right: 0;
-            z-index: 9998;
-            background: white;
-            box-shadow: 0 -2px 8px rgba(0,0,0,0.1);
-            padding: 8px;
-            text-align: center;
-        }
-        
-        .sticky-close-btn {
-            position: absolute;
-            top: 4px;
-            right: 4px;
-            background: rgba(0,0,0,0.5);
-            color: white;
-            border: none;
-            border-radius: 50%;
-            width: 24px;
-            height: 24px;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 10;
-            transition: all 0.2s;
-        }
-        
-        .sticky-close-btn:hover {
-            background: rgba(0,0,0,0.8);
-        }
-        
-        /* ===== BANNER CONTAINERS ===== */
+
         .ad-banner-container {
-            background: #f8f8f8;
-            padding: 12px;
-            margin: 16px 8px;
-            border-radius: 8px;
-            border: 1px solid #e0e0e0;
-            animation: fadeInAd 0.5s ease;
-            text-align: center;
+          margin: 12px 4px;
+          padding: 10px;
         }
-        
-        .ad-label {
-            font-size: 10px;
-            color: #999;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 8px;
-            text-align: center;
-            font-weight: 600;
+
+        .ad-banner-container,
+        .native-ad,
+        #sticky-banner {
+          max-width: 100%;
+          overflow: hidden;
         }
-        
-        /* ===== SMARTLINK TOAST ===== */
-        .smartlink-toast {
-            position: fixed;
-            bottom: 90px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            padding: 14px 24px;
-            border-radius: 25px;
-            font-size: 14px;
-            font-weight: 600;
-            z-index: 10001;
-            box-shadow: 0 8px 24px rgba(102, 126, 234, 0.4);
-            animation: bounceIn 0.5s ease;
-            backdrop-filter: blur(10px);
+
+        .ad-banner-container iframe,
+        .native-ad iframe {
+          max-width: 100% !important;
         }
-        
-        @keyframes bounceIn {
-            0% {
-                opacity: 0;
-                transform: translateX(-50%) scale(0.3);
-            }
-            50% {
-                opacity: 1;
-                transform: translateX(-50%) scale(1.05);
-            }
-            70% {
-                transform: translateX(-50%) scale(0.9);
-            }
-            100% {
-                transform: translateX(-50%) scale(1);
-            }
+      }
+
+      @media (min-width: 769px) {
+        #adsterra-social-bar {
+          display: none;
         }
-        
-        @keyframes fadeInAd {
-            from {
-                opacity: 0;
-                transform: translateY(-10px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
+
+        .ad-banner-container {
+          max-width: 728px;
+          margin: 16px auto;
         }
-        
-        /* ===== RESPONSIVE ADJUSTMENTS ===== */
-        @media (max-width: 768px) {
-            .exoclick-leaderboard {
-                display: none;
-            }
-            
-            .native-ad {
-                margin: 16px 8px;
-                padding: 12px;
-            }
-            
-            .ad-banner-container {
-                margin: 12px 4px;
-                padding: 10px;
-            }
-            
-            .ad-banner-container,
-            .native-ad,
-            #sticky-banner {
-                max-width: 100%;
-                overflow: hidden;
-            }
-            
-            .ad-banner-container iframe,
-            .native-ad iframe {
-                max-width: 100% !important;
-            }
+
+        .native-ad {
+          max-width: 300px;
+          margin: 20px auto;
         }
-        
-        @media (min-width: 769px) {
-            #adsterra-social-bar {
-                display: none;
-            }
-            
-            .ad-banner-container {
-                max-width: 728px;
-                margin: 16px auto;
-            }
-            
-            .native-ad {
-                max-width: 300px;
-                margin: 20px auto;
-            }
+      }
+
+      /* ===== LOADING STATES ===== */
+      .ad-loading {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 250px;
+        color: #999;
+        font-size: 12px;
+      }
+
+      .ad-loading::before {
+        content: "";
+        width: 20px;
+        height: 20px;
+        border: 2px solid #e0e0e0;
+        border-top-color: #999;
+        border-radius: 50%;
+        animation: spin 1s linear infinite;
+        margin-right: 8px;
+      }
+
+      @keyframes spin {
+        to {
+          transform: rotate(360deg);
         }
-        
-        /* ===== LOADING STATES ===== */
-        .ad-loading {
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            min-height: 250px;
-            color: #999;
-            font-size: 12px;
-        }
-        
-        .ad-loading::before {
-            content: '';
-            width: 20px;
-            height: 20px;
-            border: 2px solid #e0e0e0;
-            border-top-color: #999;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-right: 8px;
-        }
-        
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
-        
-        /* ===== ENSURE BOTTOM NAV NOT HIDDEN ===== */
-        .bottom-nav {
-            z-index: 9999;
-        }
+      }
+
+      /* ===== ENSURE BOTTOM NAV NOT HIDDEN ===== */
+      .bottom-nav {
+        z-index: 9999;
+      }
     </style>
-    
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>" />
+
+    <link
+      rel="icon"
+      href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>"
+    />
   </head>
   <body>
     <div class="mobile-container">
       <!-- Header -->
       <div class="header">
         <h1>
-          <img src="logo.png" alt="TITIK SPORTS" style="width: 98px; height: 58px" />
+          <img
+            src="logo.png"
+            alt="TITIK SPORTS"
+            style="width: 98px; height: 58px"
+          />
         </h1>
       </div>
-      
+
       <!-- ===== AD SLOT: Adsterra Social Bar (Mobile Sticky Top) ===== -->
       <!-- Inserted by IndexAdsManager.insertAdsterraSocialBar() -->
-      
+
       <!-- ===== AD SLOT: ExoClick Leaderboard 728x90 (Desktop) ===== -->
       <!-- Inserted by IndexAdsManager.insertExoClickLeaderboard() -->
 
@@ -309,7 +345,7 @@
           <div class="calendar-grid" id="calendarGrid"></div>
         </div>
       </div>
-      
+
       <!-- ===== AD SLOT: ExoClick Banner 300x250 (After Date Nav) ===== -->
       <!-- Inserted by IndexAdsManager.insertExoClickBannerTop() -->
 
@@ -320,7 +356,7 @@
         <button data-filter="finished">Finished</button>
         <button data-filter="scheduled">Upcoming</button>
       </div>
-      
+
       <!-- ===== AD SLOT: Monetag Banner 300x250 (After Filters) ===== -->
       <!-- Inserted by IndexAdsManager.insertMonetagBanner() -->
 
@@ -330,14 +366,19 @@
           <div class="loading-spinner"></div>
           <div class="loading-text">Loading matches...</div>
         </div>
-        
+
         <!-- League sections will be rendered here -->
         <!-- Native ads will be inserted every 4 league sections -->
       </main>
 
       <!-- Bottom Navigation -->
       <nav class="bottom-nav" role="navigation">
-        <div class="nav-item active" data-view="matches" role="button" tabindex="0">
+        <div
+          class="nav-item active"
+          data-view="matches"
+          role="button"
+          tabindex="0"
+        >
           <span class="nav-icon">⚽</span>
           Matches
         </div>
@@ -350,49 +391,48 @@
           Standings
         </div>
       </nav>
-      
+
       <!-- ===== AD SLOT: Sticky Banner (Bottom, after 3 seconds) ===== -->
       <!-- Inserted by IndexAdsManager.showStickyBanner() -->
 
       <!-- Toast Notification -->
       <div class="toast" id="toast"></div>
     </div>
-    
+
     <!-- ===== AD SLOT: Popunder (Adsterra or PopCash) ===== -->
     <!-- Scripts injected by IndexAdsManager.initPopunders() -->
-    
+
     <!-- ===== AD SLOT: Monetag Interstitial ===== -->
     <!-- Script injected by IndexAdsManager.initInterstitial() -->
 
     <!-- ===== JAVASCRIPT LOADING ORDER ===== -->
-    
+
     <!-- 🔥 NEW: Service Worker Registration (FIRST!) -->
     <script src="sw-register.js"></script>
-    
+
     <!-- 1. Configuration (MUST BE FIRST) -->
     <script src="js/index/config/app-config.js"></script>
-    
+
     <!-- 2. Utilities -->
     <script src="js/index/utils/helpers.js"></script>
-    
+
     <!-- 3. Services -->
     <script src="js/index/services/cache-service.js"></script>
     <script src="js/index/services/api-service.js"></script>
-    
+
     <!-- 4. Components (Renderers) -->
     <script src="js/index/components/matches-renderer.js"></script>
     <script src="js/index/components/leagues-renderer.js"></script>
     <script src="js/index/components/standings-renderer.js"></script>
-    
+
     <!-- 5. Managers -->
     <script src="js/index/managers/date-manager.js"></script>
     <script src="js/index/managers/view-manager.js"></script>
-    
+
     <!-- 6. Main Application -->
     <script src="js/index/app.js"></script>
-    
+
     <!-- ===== 7. INDEX ADS MANAGER (MUST BE LAST) ===== -->
     <script src="js/index/managers/index-ads-manager.js"></script>
-    
   </body>
 </html>

@@ -65,7 +65,7 @@
     navigator.serviceWorker.getRegistrations().then((registrations) => {
         registrations.forEach((registration) => {
             // Check scope to avoid unregistering our own SW
-            if (registration.active && registration.active.scriptURL.includes('/sw.js')) {
+            if (registration.active && registration.active.scriptURL.includes('sw.js')) {
                 console.log('[SW] Found Monetag sw.js:', registration.scope);
                 // Don't unregister - let it coexist
             }
